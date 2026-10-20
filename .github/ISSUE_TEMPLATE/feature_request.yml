@@ -1,0 +1,17 @@
+name: Feature request
+description: Propose an improvement to illustrated web answers.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the use case and what currently prevents it.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the desired result and any alternatives.
+    validations:
+      required: true

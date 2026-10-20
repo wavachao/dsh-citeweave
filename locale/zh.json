@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "CiteWeave 图文检索",
+    "description": "检索网页证据与相关图片，为 Agent 回答提供可溯源配图。"
+  }
+}

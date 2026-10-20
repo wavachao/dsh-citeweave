@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm install --global pnpm@11.25.0
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+        env:
+          DSH_TELEMETRY_DISABLED: '1'
+      - run: node scripts/package.js
+      - name: Publish installation archive and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.tgz dist/SHA256SUMS --verify-tag --title "$GITHUB_REF_NAME" --notes-file dist/RELEASE_NOTES.md
