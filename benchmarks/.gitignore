@@ -1,0 +1,6 @@
+# Private collection state and transient runtime profiles are never published.
+comparison-*/
+run.log
+prewarm*
+run.mjs
+private-runs/

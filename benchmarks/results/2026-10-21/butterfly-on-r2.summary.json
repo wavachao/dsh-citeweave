@@ -1,0 +1,127 @@
+{
+  "id": "butterfly-on-r2",
+  "case": "butterfly",
+  "enabled": true,
+  "repeat": 2,
+  "turnSeconds": 31.449,
+  "processSeconds": 32.905,
+  "firstAssistantTextSeconds": 31.448,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 915,
+    "warmupSeconds": 0.23610320399166085,
+    "checkedAt": 1792514861.0851479
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_BgLBOzlioK9mTxGThfw01320",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "蝴蝶 完全变态 卵 幼虫 蛹 成虫 示意图",
+        "refresh": true
+      },
+      "relativeSeconds": 0.679,
+      "seconds": 27.493
+    }
+  ],
+  "toolErrors": [],
+  "usage": [
+    {
+      "inputTokens": 198,
+      "outputTokens": 69,
+      "cacheReadTokens": 6656,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6923
+    },
+    {
+      "inputTokens": 3943,
+      "outputTokens": 682,
+      "cacheReadTokens": 6912,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11537
+    }
+  ],
+  "imageCount": 2,
+  "sourceLinkCount": 3,
+  "sourceLinks": [
+    "https://www.floridamuseum.ufl.edu/educators/resource/butterfly-life-cycle/",
+    "https://www.vhtc.org/2026/03/life-cycle-of-butterfly.html",
+    "http://www.butterflyschool.org/new/meta.html"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [
+    {
+      "attachmentObject": "ec60e77f74daf61038aba10b627c8f38984f69b6317d396aa658af0cd105b62a",
+      "originalImageUrl": "https://www.floridamuseum.ufl.edu/wp-content/uploads/sites/16/2022/08/ButterflyLifeCycleimage-500x462.png"
+    },
+    {
+      "attachmentObject": "48cd5fdfe0c715e5e5634932f7bf9b61093c5a5fa743885751aff319077319cb",
+      "originalImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgo4OOut5zr95jiRa4WnOQo88lzIROMf4x1f0WaEwFfQ2zEziVuCetHo6AgxiDgQqClBQ7Itb2NInvuu-Oot3v8d7KjSh5zEbZUTTUHvirQ-TO2hzuimdJXhIb90ISvJzz2uweFAE_7GGwfPfSR0Q0kjoVz4sX6kgO1nurLdCe2nEODYfYP9dcmxKNEXhw/s16000-rw/life-cycle-of-butterfly.jpg"
+    }
+  ],
+  "backend": [
+    {
+      "serial": 18,
+      "status": 200,
+      "seconds": 27.431,
+      "request": {
+        "query": "蝴蝶 完全变态 卵 幼虫 蛹 成虫 示意图",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [
+        {
+          "id": "s0",
+          "title": "Life Cycle of a Butterfly Generator | Figviz",
+          "url": "https://figviz.com/tools/life-cycle-of-a-butterfly-generator"
+        },
+        {
+          "id": "s1",
+          "title": "Life Cycle of a Butterfly - 4 Stages of Complete Metamorphosis (Egg to Adult)",
+          "url": "https://www.vhtc.org/2026/03/life-cycle-of-butterfly.html"
+        },
+        {
+          "id": "s2",
+          "title": "Butterfly Life Cycle – For Educators",
+          "url": "https://www.floridamuseum.ufl.edu/educators/resource/butterfly-life-cycle/"
+        },
+        {
+          "id": "s3",
+          "title": "Butterfly School: Metamorphosis",
+          "url": "http://www.butterflyschool.org/new/meta.html"
+        }
+      ],
+      "images": [
+        {
+          "id": "i1",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgo4OOut5zr95jiRa4WnOQo88lzIROMf4x1f0WaEwFfQ2zEziVuCetHo6AgxiDgQqClBQ7Itb2NInvuu-Oot3v8d7KjSh5zEbZUTTUHvirQ-TO2hzuimdJXhIb90ISvJzz2uweFAE_7GGwfPfSR0Q0kjoVz4sX6kgO1nurLdCe2nEODYfYP9dcmxKNEXhw/s16000-rw/life-cycle-of-butterfly.jpg",
+          "source_id": "s1",
+          "source_url": "https://www.vhtc.org/2026/03/life-cycle-of-butterfly.html",
+          "caption_kind": "api_visual_description",
+          "caption": "This image displays a hand-drawn educational diagram titled “Life Cycle of Butterfly,” illustrating the four stages: egg on a leaf (labeled ①), caterpillar/larva (②) that “eats a lot,” pupa/chrysalis undergoing “transformation” (③), and adult butterfly with “wings, reproduction” (④). The cycle is shown with blue arrows connecting the stages, and includes notes such as “Complete metamorphosis,” “Four stages,” “Larva grows fast,” and “Adult reproduces,” along with a small box summarizing the progression: Larva → Pupa → Adult."
+        },
+        {
+          "id": "i3",
+          "url": "https://www.floridamuseum.ufl.edu/wp-content/uploads/sites/16/2022/08/ButterflyLifeCycleimage-500x462.png",
+          "source_id": "s2",
+          "source_url": "https://www.floridamuseum.ufl.edu/educators/resource/butterfly-life-cycle/",
+          "caption_kind": "api_visual_description",
+          "caption": "This diagram illustrates the butterfly life cycle, showing four distinct stages arranged in a circular flow: egg, larva (caterpillar), pupa (chrysalis), and adult. Each stage is clearly labeled with text beneath its corresponding illustration, and large gray arrows indicate the progression from one stage to the next. The adult stage is depicted as a fully formed monarch butterfly, while the other stages show simplified representations of the egg, caterpillar, and chrysalis."
+        }
+      ],
+      "retrievalErrors": [
+        {
+          "url": "https://www.dreamstime.com/complete-metamorphosis-all-life-development-cycle-stages-outline-diagram-labeled-educational-butterfly-growth-egg-larva-pupa-image233155371",
+          "error": "HTTP 403 while retrieving https://www.dreamstime.com/complete-metamorphosis-all-life-development-cycle-stages-outline-diagram-labeled-educational-butterfly-growth-egg-larva-pupa-image233155371"
+        }
+      ]
+    }
+  ]
+}

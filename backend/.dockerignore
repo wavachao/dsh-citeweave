@@ -1,0 +1,16 @@
+.git
+.env*
+.venv*
+.cache
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+models
+data
+reference
+runs
+work
+tests
+docs/screenshots
+*.zip

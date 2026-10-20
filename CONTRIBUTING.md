@@ -1,10 +1,10 @@
 # Contributing
 
-Issues and pull requests are welcome. Keep changes focused on the DeepSeek Harness integration; backend retrieval and model changes belong in [CiteWeave](https://github.com/wavachao/citeweave).
+Issues and pull requests are welcome for both the Harness plugin and Python backend.
 
-## Local development
+## Plugin development
 
-Use Node.js 24 or later and DeepSeek Harness `0.2.1-rc.2`.
+Use Node.js 24+ and Harness `0.2.1-rc.2`.
 
 ```sh
 git clone https://github.com/wavachao/dsh-citeweave.git
@@ -12,37 +12,33 @@ cd dsh-citeweave
 npm ci
 npm run check
 npm test
-npm pack --dry-run
+npm run pack:release
 ```
 
-The entry point is a runnable ES module. No transpiler or build step is required. `cordis.patch.yml` registers the Host plugin, `index.js` implements the tool, and package resources provide its display metadata.
+`index.js` implements the tool, `client.js` provides the configuration interface, and `cordis.patch.yml` registers the plugin. The package uses runnable ES modules.
 
-Install the checkout into a configured test profile for manual testing:
+For manual integration testing, install the checkout in a configured test profile:
 
 ```sh
 dsh plugin --profile citeweave-dev add .
-dsh --profile citeweave-dev --dump-config
 ```
 
-The example profile name is `citeweave-dev`; use the name of your test profile. A profile created only by `dsh plugin add` is base-backed. For image rendering checks, use a configured Web profile rather than assuming its name selects a Web surface. Start it with a reachable [backend](docs/backend.md) and a configured answer model. Ask an ordinary question requesting an illustration. Confirm that the model calls `citeweave_search`, embeds a selected image, and cites the original source page.
+Use a Web or Desktop profile with an answer model and reachable backend. Verify source links, inline images, session reopening, and attachment export.
 
-## Validation
+## Backend development
 
-Run `npm run check`, `npm test`, and `npm pack --dry-run` before submitting a change. Tests use deterministic local evidence and do not need GPU models, external search, or API credentials. Clean-profile installation requires package-registry access and pnpm. The suite packs the archive, installs it through the real Harness CLI, executes the installed tool with native Harness services, reopens stored images, and verifies their inclusion in the official ZIP export. These checks do not substitute for a live backend check.
+The Python package and tests live in `backend/`. See its [README](backend/README.md) for environment setup and test commands. Unit tests run without GPU models; retrieval and lifecycle changes also need a live integration check.
 
-For changes to tool guidance, API requests, image rendering, or attachments, also verify the relevant real integration path:
+Keep model weights, runtime data, credentials, and private session logs outside Git.
 
-- Install the packed archive into a fresh Harness profile.
-- Use the pinned CiteWeave backend and ask a natural-language question with suitable public sources.
-- Check source links, inline image loading, and session reopening.
-- Export the session and confirm that returned native image attachments are included.
+## Evaluation
 
-Report which checks passed and which require an environment you did not have. Do not commit credentials, model weights, generated archives, or private conversation logs.
+The [Harness comparison](benchmarks/README.md) contains its prompts, runner, environment, and measurements. When changing retrieval or model behavior, record the tested revisions and include the answers needed to review the results.
 
-## Pull requests and releases
+## Releases
 
-Explain the user-visible problem, the resulting behavior, and the checks performed. Update English and Chinese READMEs when changing installation, supported versions, or user-facing behavior. Update the reference for configuration and tool-contract changes.
+Plugin and backend source are released together using `v<package-version>` tags. CI checks the JavaScript plugin, Python backend, and installation archive. GitHub Releases provide the plugin archive, backend wheel and source distribution, and SHA-256 checksums. Backend deployments use the matching source tag.
 
-Releases use `v<package-version>` tags and GitHub Release archives. A release must pass CI, contain the declared bundle entry points and display resources, and retain the supported Harness version declaration. Runtime compatibility changes require installation and integration checks against the new target version.
+Update the changelog for user-facing changes and keep English and Chinese installation instructions aligned.
 
-By contributing, you agree that your contribution is licensed under the project's [MIT license](LICENSE).
+Contributions are licensed under [MIT](LICENSE).

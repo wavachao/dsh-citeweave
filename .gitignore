@@ -11,3 +11,13 @@ work/
 
 backend/models/
 backend/__pycache__/
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+backend/data/
+backend/runs/
+backend/reference/
+*.sqlite*
+*.db

@@ -10,7 +10,7 @@ The access-token field is masked and write-only: the saved value is not returned
 
 The package is a native Host plugin bundle with a configuration client: `package.json` declares `dsh.bundle`, and `cordis.patch.yml` inserts the `citeweave` plugin row. The retrieval tool requires the Harness `tools`, `systemPrompt`, `attachments`, and `fs` services.
 
-Backend model selection is independent of the Harness answer model. The optional [Qwen3.5 vLLM profile](../backend/README.md) runs local query assistance and visual descriptions with CPU ranking, while Harness retains its DeepSeek provider. Model-server settings belong to the backend's environment, not this plugin configuration form.
+Backend model selection is independent of the Harness answer model. The [Qwen3.5 vLLM backend](https://github.com/wavachao/dsh-citeweave/tree/main/backend) runs local query assistance and visual descriptions with CPU ranking, while Harness retains its DeepSeek provider. Model-server settings belong to the backend environment.
 
 | Field | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -26,18 +26,18 @@ A non-empty configured `endpoint` or `accessToken` overrides the corresponding e
 For command-line installation, use an initialized Harness Web profile. If this is a new setup, run `dsh web` once and configure the answer model first. The examples use `web`; substitute your actual profile name if different.
 
 ```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.4.0
+dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.5.0
 ```
 
 Alternatively, download and install the release archive:
 
 ```sh
-curl -fL -o dsh-citeweave-0.4.0.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.4.0/dsh-citeweave-0.4.0.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.4.0.tgz
+curl -fL -o dsh-citeweave-0.5.0.tgz \
+  https://github.com/wavachao/dsh-citeweave/releases/download/v0.5.0/dsh-citeweave-0.5.0.tgz
+dsh plugin --profile web add ./dsh-citeweave-0.5.0.tgz
 ```
 
-The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0) includes the archive and `SHA256SUMS`.
+The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.0) includes the archive and `SHA256SUMS`.
 
 ## Advanced configuration
 
@@ -123,7 +123,7 @@ Images persist in Harness's attachment store, independently of the backend's ima
 | Tool is absent | Install into the profile used to start Harness; inspect `dsh --profile web --dump-config` for the `dsh-citeweave` layer. |
 | Connection changes are not reflected | Save the `citeweave` configuration page and start a new tool call. Check for a later configuration patch overriding the same row. |
 | `401` | Ensure the plugin's token matches the backend's `CITEWEAVE_ACCESS_TOKEN`. Restart the host after changing its environment. |
-| `404` at `/api/evidence` | Deploy the pinned backend revision and verify root API routing. |
+| `404` at `/api/evidence` | Check the backend version and root API routing. |
 | `409` | A legacy worker is busy, or a job-state operation conflicts with an already running task. |
 | `429` | Queue capacity or request admission limit; honor `Retry-After`. No task is accepted when the queue is full. |
 | `503` | A serving dependency or task failed; use the request/task ID to inspect the backend. Empty retrieval results are returned as evidence diagnostics by the adapter. |

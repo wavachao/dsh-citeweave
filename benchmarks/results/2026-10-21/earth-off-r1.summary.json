@@ -1,0 +1,173 @@
+{
+  "id": "earth-off-r1",
+  "case": "earth",
+  "enabled": false,
+  "repeat": 1,
+  "turnSeconds": 26.524,
+  "processSeconds": 28.331,
+  "firstAssistantTextSeconds": 26.523,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 967,
+    "warmupSeconds": 0.2411113080161158,
+    "checkedAt": 1792514440.0735657
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_OO5r9c4lTRLCeFM6bR0X6950",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "埃拉托色尼 测量地球周长 日影 7.2度 几何原理",
+          "Eratosthenes Earth circumference shadow Alexandria Syene 7.2 degrees diagram"
+        ]
+      },
+      "relativeSeconds": 1.313,
+      "seconds": 5.621
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_Pv6sRmOG2az7k4P2rhYy8164",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Eratosthenes Earth circumference diagram image Wikimedia Commons",
+          "埃拉托色尼 测地球周长 示意图 图片"
+        ]
+      },
+      "relativeSeconds": 8.142,
+      "seconds": 5.902
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_6S2517s8FnXZZt2jT1GV4604",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://cloud.kepuchina.cn/h5/detail?id=6969202823933456384#2"
+      },
+      "relativeSeconds": 8.144,
+      "seconds": 5.901
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_KUosHemPsOdm4J7UmThQ8549",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://commons.wikimedia.org/wiki/File:Eratosthenes_measure_of_Earth_circumference.svg"
+      },
+      "relativeSeconds": 14.751,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_MzneMyjnNvud3dfulZhh8530",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.kepuchina.cn/more/202011/t20201106_2837855.shtml"
+      },
+      "relativeSeconds": 14.752,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_7FM6MSwj7KGn5Ui270eF7487",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/Eratosthenes"
+      },
+      "relativeSeconds": 16.146,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_Q0Knewu2YrCbruSWy3aS7444",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Eratosthenes measurement Earth circumference geometry central angle shadows facts history"
+        ]
+      },
+      "relativeSeconds": 16.148,
+      "seconds": 6.477
+    }
+  ],
+  "toolErrors": [
+    {
+      "type": "tool_result",
+      "callId": "call_01_6S2517s8FnXZZt2jT1GV4604",
+      "status": "error",
+      "result": "Error: URL hostname \"cloud.kepuchina.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_KUosHemPsOdm4J7UmThQ8549",
+      "status": "error",
+      "result": "Error: URL hostname \"commons.wikimedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_MzneMyjnNvud3dfulZhh8530",
+      "status": "error",
+      "result": "Error: URL hostname \"www.kepuchina.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_7FM6MSwj7KGn5Ui270eF7487",
+      "status": "error",
+      "result": "Error: URL hostname \"en.wikipedia.org\" resolves to a non-public IP address"
+    }
+  ],
+  "usage": [
+    {
+      "inputTokens": 882,
+      "outputTokens": 77,
+      "cacheReadTokens": 5632,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6591
+    },
+    {
+      "inputTokens": 504,
+      "outputTokens": 115,
+      "cacheReadTokens": 6528,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7147
+    },
+    {
+      "inputTokens": 625,
+      "outputTokens": 111,
+      "cacheReadTokens": 7040,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7776
+    },
+    {
+      "inputTokens": 155,
+      "outputTokens": 90,
+      "cacheReadTokens": 7680,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7925
+    },
+    {
+      "inputTokens": 569,
+      "outputTokens": 691,
+      "cacheReadTokens": 7808,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9068
+    }
+  ],
+  "imageCount": 0,
+  "sourceLinkCount": 4,
+  "sourceLinks": [
+    "https://www.kepuchina.cn/more/202011/t20201106_2837855.shtml#1",
+    "https://cloud.kepuchina.cn/h5/detail?id=6969202823933456384#2",
+    "https://perimeterinstitute.ca/news/how-measure-earths-circumference",
+    "https://commons.wikimedia.org/wiki/File:Eratosthenes_measure_of_Earth_circumference.svg"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [],
+  "backend": []
+}

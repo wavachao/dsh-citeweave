@@ -1,0 +1,193 @@
+{
+  "id": "earth-on-r2",
+  "case": "earth",
+  "enabled": true,
+  "repeat": 2,
+  "turnSeconds": 59.658,
+  "processSeconds": 61.078,
+  "firstAssistantTextSeconds": 59.658,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 921,
+    "warmupSeconds": 0.19529995298944414,
+    "checkedAt": 1792514690.4807048
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_g7HNGz1OYQHuh6QuR57n2813",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "埃拉托色尼 测量地球周长 赛伊尼 亚历山大 日影 7.2度 几何关系",
+        "refresh": true
+      },
+      "relativeSeconds": 1.296,
+      "seconds": 36.425
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_j35Xww6LvgHxzQFFQSQM2363",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "Eratosthenes earth circumference shadow angle Syene Alexandria diagram",
+        "refresh": true
+      },
+      "relativeSeconds": 38.707,
+      "seconds": 7.212
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_Nesmnvw9UCehnYSOwWUp2832",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "How Eratosthenes measured Earth's circumference using shadows in Alexandria and Syene",
+        "urls": [
+          "https://www.britannica.com/science/eratosthenes-measurement-of-the-earth",
+          "https://en.wikipedia.org/wiki/Eratosthenes"
+        ],
+        "refresh": true
+      },
+      "relativeSeconds": 46.933,
+      "seconds": 8.294
+    }
+  ],
+  "toolErrors": [
+    {
+      "type": "tool_result",
+      "callId": "call_00_g7HNGz1OYQHuh6QuR57n2813",
+      "status": "error",
+      "result": "Error: CiteWeave /api/evidence: HTTP 503: Search could not be completed. Try another question or specify a public source URL."
+    }
+  ],
+  "usage": [
+    {
+      "inputTokens": 203,
+      "outputTokens": 80,
+      "cacheReadTokens": 6656,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6939
+    },
+    {
+      "inputTokens": 196,
+      "outputTokens": 66,
+      "cacheReadTokens": 6784,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7046
+    },
+    {
+      "inputTokens": 210,
+      "outputTokens": 118,
+      "cacheReadTokens": 6912,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7240
+    },
+    {
+      "inputTokens": 4186,
+      "outputTokens": 689,
+      "cacheReadTokens": 7168,
+      "cacheWriteTokens": 0,
+      "totalTokens": 12043
+    }
+  ],
+  "imageCount": 1,
+  "sourceLinkCount": 2,
+  "sourceLinks": [
+    "https://en.wikipedia.org/wiki/Eratosthenes",
+    "https://en.wikipedia.org/wiki/Earth%27s_circumference"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [
+    {
+      "attachmentObject": "b0b3cf304c1ed1a20e0a509b31819f4d65b8be3fcdeccfb83835d847fe8ef352",
+      "originalImageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Eratosthenes_measure_of_Earth_circumference.svg/500px-Eratosthenes_measure_of_Earth_circumference.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+    }
+  ],
+  "backend": [
+    {
+      "serial": 13,
+      "status": 503,
+      "seconds": 36.413,
+      "request": {
+        "query": "埃拉托色尼 测量地球周长 赛伊尼 亚历山大 日影 7.2度 几何关系",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "detail": "Search could not be completed. Try another question or specify a public source URL.",
+      "sources": [],
+      "images": [],
+      "retrievalErrors": []
+    },
+    {
+      "serial": 14,
+      "status": 200,
+      "seconds": 7.202,
+      "request": {
+        "query": "Eratosthenes earth circumference shadow angle Syene Alexandria diagram",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [],
+      "images": [],
+      "retrievalErrors": [
+        {
+          "url": "",
+          "error": "No matching web results were found."
+        }
+      ]
+    },
+    {
+      "serial": 15,
+      "status": 200,
+      "seconds": 8.243,
+      "request": {
+        "query": "How Eratosthenes measured Earth's circumference using shadows in Alexandria and Syene",
+        "urls": [
+          "https://www.britannica.com/science/eratosthenes-measurement-of-the-earth",
+          "https://en.wikipedia.org/wiki/Eratosthenes"
+        ],
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [
+        {
+          "id": "s0",
+          "title": "Eratosthenes - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Eratosthenes"
+        }
+      ],
+      "images": [
+        {
+          "id": "i2",
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Eratosthenes_measure_of_Earth_circumference.svg/500px-Eratosthenes_measure_of_Earth_circumference.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "source_id": "s0",
+          "source_url": "https://en.wikipedia.org/wiki/Eratosthenes",
+          "caption_kind": "api_visual_description",
+          "caption": "This diagram illustrates Eratosthenes' method for calculating the Earth's circumference by comparing the angle of the sun's rays at two different locations: Alexandria and Syene (Aswan). It shows parallel sun rays striking the Earth, with the difference in shadow angles at these two points being used to determine that one-fiftieth of a circle corresponds to approximately 5000 stadia, leading to a calculated circumference of about 40,000 km. The image includes labeled diagrams of the Earth, a map showing the locations of Alexandria and Syene, and annotations explaining the geometric relationships and calculations involved."
+        },
+        {
+          "id": "i7",
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/250px-Mappa_di_Eratostene.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "source_id": "s0",
+          "source_url": "https://en.wikipedia.org/wiki/Eratosthenes",
+          "caption_kind": "api_visual_description",
+          "caption": "This is a historical map titled \"Map of the World according to Eratosthenes,\" depicting an ancient geographical understanding of the world. The map shows a large landmass in the center, likely representing Europe, Asia, and Africa, with various regions and cities marked. The surrounding areas are labeled with names of seas and oceans, such as the Mediterranean Sea and the Atlantic Ocean. The map also includes a grid of latitude and longitude lines, indicating the cartographer's attempt to represent the world's geography with some level of accuracy."
+        }
+      ],
+      "retrievalErrors": [
+        {
+          "url": "https://www.britannica.com/science/eratosthenes-measurement-of-the-earth",
+          "error": "HTTP 403 while retrieving https://www.britannica.com/science/eratosthenes-measurement-of-the-earth"
+        }
+      ]
+    }
+  ]
+}

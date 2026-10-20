@@ -1,0 +1,697 @@
+{
+  "id": "butterfly-off-r2",
+  "case": "butterfly",
+  "enabled": false,
+  "repeat": 2,
+  "turnSeconds": 66.85,
+  "processSeconds": 68.27,
+  "firstAssistantTextSeconds": 1.29,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 915,
+    "warmupSeconds": 0.23536021600011736,
+    "checkedAt": 1792514792.0476775
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_uvtfmhEUpeXvRs5CObnh5721",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "butterfly complete metamorphosis egg larva pupa adult stages",
+          "蝴蝶 完全变态 卵 幼虫 蛹 成虫 形态 作用"
+        ]
+      },
+      "relativeSeconds": 1.291,
+      "seconds": 4.377
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_ZWPlK7exwWM0Eps8OGy48070",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/Butterfly"
+      },
+      "relativeSeconds": 1.292,
+      "seconds": 4.377
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_RNTNRWWPbXgrU6lhIzmI0189",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.amnh.org/explore/news-blogs/life-cycle-butterfly"
+      },
+      "relativeSeconds": 6.735,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_C3Y2VX4nGFzpC2zAq6Jh1852",
+      "tool": "web_fetch",
+      "input": {
+        "url": "http://scbg.cas.cn/hx/201809/t20180922_6734919.html"
+      },
+      "relativeSeconds": 6.736,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_Tsp1zjF30yUcmzDfQ6RD1742",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "butterfly life cycle stages egg caterpillar chrysalis adult",
+          "蝴蝶生活史 图 卵 幼虫 蛹 成虫 图片",
+          "fly metamorphasis 完全变态 示意图 高清"
+        ]
+      },
+      "relativeSeconds": 7.532,
+      "seconds": 4.577
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_3MdVdemvgQcJrx45llD46414",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.ntm.gov.tw/News_Publish_Content.aspx?n=5540&sms=14639&s=163880"
+      },
+      "relativeSeconds": 12.987,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_l6RETdWyi9sXynjq3s7F3595",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9984190/figure/fig1/"
+      },
+      "relativeSeconds": 12.988,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_TNncoakJ4yVMaOZrRJ689990",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "www.insects.org butterfly life cycle",
+          "butterfly egg larva pupa adult image file commons",
+          "butterflies stage diagram image png"
+        ]
+      },
+      "relativeSeconds": 13.926,
+      "seconds": 4.097
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_5B5cKUTFUtkPqZUIn1To6557",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.alamyimages.fr/entomologie-elementaire-fig-263-la-black-swallowtail-butterfly-papilio-folyxenes-legerement-reduite-un-oeuf-caterpillar-c-vue-de-face-de-la-tete-avec-osmateria-saillie-lt-chrysalis-lt-adulte-apres-176-webster-image178411807.html"
+      },
+      "relativeSeconds": 19.573,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_evsd2pFqPRqUBQX1QTj75222",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "butterfly metamorphosis 阶段 图片 数据 科普 卵 幼虫 蛹 成虫 新华社",
+          "monarch butterfly egg caterpillar chrysalis and butterfly photo"
+        ]
+      },
+      "relativeSeconds": 19.574,
+      "seconds": 7.246
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_Q6UDeho11ScczszgdKY50413",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://m.gmw.cn/2024-03/04/content_1303678120.htm"
+      },
+      "relativeSeconds": 27.617,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_mON6vylEHApbnBPKjX7A2327",
+      "tool": "web_fetch",
+      "input": {
+        "url": "http://yn.xinhuanet.com/travel/2022-06/01/c_1310610774.htm"
+      },
+      "relativeSeconds": 27.617,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_ZNyyH6JHitxof98QdtZO5800",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://iucn.org/sites/default/files/content/documents/2018/butterfly_guidebook_-_low_res.pdf"
+      },
+      "relativeSeconds": 28.327,
+      "seconds": 0.007
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_pRpFn0e6dEj7HKmosjZh4963",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Wikimedia Commons butterfly egg caterpillar chrysalis adult butterfly colored",
+          "蝴蝶 完全变态 四阶段 图片 百科"
+        ]
+      },
+      "relativeSeconds": 29.09,
+      "seconds": 5.043
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_0Ud2gxYPLhtCc6cmeYdC6089",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://zh.wikipedia.org/wiki/Wikipedia:%E6%AF%8F%E6%97%A5%E5%9B%BE%E7%89%87/2008%E5%B9%B48%E6%9C%884%E6%97%A5"
+      },
+      "relativeSeconds": 35.165,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_l0MY9bEPOCeJ0S8dLT1m8677",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://big5.cctv.com/gate/big5/www.cctv.cn/program/kjy/20070815/114007.shtml"
+      },
+      "relativeSeconds": 35.166,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_rjansYslroePXglBgI4q6213",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "蝴蝶 生活史 卵 一龄幼虫 二龄 蛹 成虫 图",
+          "butterfly lifecycle infographic public domain image"
+        ]
+      },
+      "relativeSeconds": 36.011,
+      "seconds": 6.536
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_RLsSxXLbxBl7JNxWqoih1104",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.casadasciencias.org/imagem/7534"
+      },
+      "relativeSeconds": 43.149,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_hg4z0G5w65mLbT3nbiFp0046",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "butterfly life cycle infographic",
+          "butterfly metamorphosis diagram vector freepik"
+        ]
+      },
+      "relativeSeconds": 43.149,
+      "seconds": 3.708
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_8t7aj2fSZxNp5P9PVFQs7903",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.sciencelearn.org.nz/image_maps/48-monarch-butterfly-life-cycle"
+      },
+      "relativeSeconds": 47.852,
+      "seconds": 0.008
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_ZXM6KuFgpdMZOoSnbznb3999",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3225893/figure/F1/"
+      },
+      "relativeSeconds": 47.852,
+      "seconds": 0.008
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_nRbeIy8LhcCiM8acBs6Q0774",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://library.oapen.org/bitstream/handle/20.500.12657/99863/9783031737343.pdf?sequence=1"
+      },
+      "relativeSeconds": 48.804,
+      "seconds": 0.008
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_zQicjDQOYBVLXJp4LuGe1652",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "\"butterfly\" \"life cycle\" 卵 圖 示意圖",
+          "蝴蝶 四阶段 生长 过程 图解"
+        ]
+      },
+      "relativeSeconds": 48.805,
+      "seconds": 4.739
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_jGcAaY1oWZQRwnBvNGOk1782",
+      "tool": "web_fetch",
+      "input": {
+        "url": "http://scbg.cas.cn/old/lyfw/hx/201809/t20180922_5086502.html"
+      },
+      "relativeSeconds": 54.327,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_p6ejsYcr2pqCo3csMzNe2661",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.sohu.com/a/252121154_288672"
+      },
+      "relativeSeconds": 54.327,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_02_oumCqIfCvgQ1saQR5onY0385",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://m.thepaper.cn/newsDetail_forward_18376634"
+      },
+      "relativeSeconds": 54.328,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_T1CPmuZPjMcnonJ5VbJ86152",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.shutterstock.com/zh/image-vector/butterfly-reproductive-metamorphosis-insects-reproduction-growth-2203717265"
+      },
+      "relativeSeconds": 55.332,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_SLYvlf7ss2PIAOshZpzM3199",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.v2.pjsir.org/index.php/biological-sciences/article/download/3126/1648/3239"
+      },
+      "relativeSeconds": 55.333,
+      "seconds": 0.008
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_vojZPYzRRjJq4WDUjysE3318",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "butterfly life cycle four stages",
+          "butterfly metamorphosis"
+        ]
+      },
+      "relativeSeconds": 55.959,
+      "seconds": 4.527
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_JDCdYCd79Sus3BZSFXsS3328",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://askabiologist.asu.edu/monarch-life-cycle"
+      },
+      "relativeSeconds": 61.658,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_jPg48OvcxWlvwmlQREDo8104",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.floridamuseum.ufl.edu/wp-content/uploads/sites/16/2022/08/Butterfly-Life-Cycle.pdf"
+      },
+      "relativeSeconds": 61.658,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_02_eQH7x32D7pN5trXPEfFh9293",
+      "tool": "web_fetch",
+      "input": {
+        "url": "http://www.bbsrc.ac.uk/web/FILES/Resources/discovery6.pdf"
+      },
+      "relativeSeconds": 61.659,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_gugq39dhWvVBLGQOs8tE7394",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://ia801606.us.archive.org/33/items/lifeamongbutterf796rand/lifeamongbutterf796rand.pdf"
+      },
+      "relativeSeconds": 62.891,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_qntdETsuoGdAJSuBUdwm2648",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.nationalgeographic.com/animals/article/science-of-metamorphosis-butterflies-caterpillars"
+      },
+      "relativeSeconds": 62.892,
+      "seconds": 0.009
+    }
+  ],
+  "toolErrors": [
+    {
+      "type": "tool_result",
+      "callId": "call_01_ZWPlK7exwWM0Eps8OGy48070",
+      "status": "error",
+      "result": "Error: URL hostname \"en.wikipedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_RNTNRWWPbXgrU6lhIzmI0189",
+      "status": "error",
+      "result": "Error: URL hostname \"www.amnh.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_C3Y2VX4nGFzpC2zAq6Jh1852",
+      "status": "error",
+      "result": "Error: URL hostname \"scbg.cas.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_3MdVdemvgQcJrx45llD46414",
+      "status": "error",
+      "result": "Error: URL hostname \"www.ntm.gov.tw\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_l6RETdWyi9sXynjq3s7F3595",
+      "status": "error",
+      "result": "Error: URL hostname \"pmc.ncbi.nlm.nih.gov\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_5B5cKUTFUtkPqZUIn1To6557",
+      "status": "error",
+      "result": "Error: URL hostname \"www.alamyimages.fr\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_Q6UDeho11ScczszgdKY50413",
+      "status": "error",
+      "result": "Error: URL hostname \"m.gmw.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_mON6vylEHApbnBPKjX7A2327",
+      "status": "error",
+      "result": "Error: URL hostname \"yn.xinhuanet.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_ZNyyH6JHitxof98QdtZO5800",
+      "status": "error",
+      "result": "Error: URL hostname \"iucn.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_0Ud2gxYPLhtCc6cmeYdC6089",
+      "status": "error",
+      "result": "Error: URL hostname \"zh.wikipedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_l0MY9bEPOCeJ0S8dLT1m8677",
+      "status": "error",
+      "result": "Error: URL hostname \"big5.cctv.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_RLsSxXLbxBl7JNxWqoih1104",
+      "status": "error",
+      "result": "Error: URL hostname \"www.casadasciencias.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_8t7aj2fSZxNp5P9PVFQs7903",
+      "status": "error",
+      "result": "Error: URL hostname \"www.sciencelearn.org.nz\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_ZXM6KuFgpdMZOoSnbznb3999",
+      "status": "error",
+      "result": "Error: URL hostname \"pmc.ncbi.nlm.nih.gov\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_nRbeIy8LhcCiM8acBs6Q0774",
+      "status": "error",
+      "result": "Error: URL hostname \"library.oapen.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_jGcAaY1oWZQRwnBvNGOk1782",
+      "status": "error",
+      "result": "Error: URL hostname \"scbg.cas.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_p6ejsYcr2pqCo3csMzNe2661",
+      "status": "error",
+      "result": "Error: URL hostname \"www.sohu.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_02_oumCqIfCvgQ1saQR5onY0385",
+      "status": "error",
+      "result": "Error: URL hostname \"m.thepaper.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_T1CPmuZPjMcnonJ5VbJ86152",
+      "status": "error",
+      "result": "Error: URL hostname \"www.shutterstock.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_SLYvlf7ss2PIAOshZpzM3199",
+      "status": "error",
+      "result": "Error: URL hostname \"www.v2.pjsir.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_JDCdYCd79Sus3BZSFXsS3328",
+      "status": "error",
+      "result": "Error: URL hostname \"askabiologist.asu.edu\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_jPg48OvcxWlvwmlQREDo8104",
+      "status": "error",
+      "result": "Error: URL hostname \"www.floridamuseum.ufl.edu\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_02_eQH7x32D7pN5trXPEfFh9293",
+      "status": "error",
+      "result": "Error: URL hostname \"www.bbsrc.ac.uk\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_gugq39dhWvVBLGQOs8tE7394",
+      "status": "error",
+      "result": "Error: URL hostname \"ia801606.us.archive.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_qntdETsuoGdAJSuBUdwm2648",
+      "status": "error",
+      "result": "Error: URL hostname \"www.nationalgeographic.com\" resolves to a non-public IP address"
+    }
+  ],
+  "usage": [
+    {
+      "inputTokens": 237,
+      "outputTokens": 121,
+      "cacheReadTokens": 6272,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6630
+    },
+    {
+      "inputTokens": 491,
+      "outputTokens": 104,
+      "cacheReadTokens": 6528,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7123
+    },
+    {
+      "inputTokens": 140,
+      "outputTokens": 81,
+      "cacheReadTokens": 7040,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7261
+    },
+    {
+      "inputTokens": 508,
+      "outputTokens": 115,
+      "cacheReadTokens": 7168,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7791
+    },
+    {
+      "inputTokens": 171,
+      "outputTokens": 71,
+      "cacheReadTokens": 7680,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7922
+    },
+    {
+      "inputTokens": 1051,
+      "outputTokens": 190,
+      "cacheReadTokens": 7808,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9049
+    },
+    {
+      "inputTokens": 593,
+      "outputTokens": 109,
+      "cacheReadTokens": 8960,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9662
+    },
+    {
+      "inputTokens": 248,
+      "outputTokens": 65,
+      "cacheReadTokens": 9472,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9785
+    },
+    {
+      "inputTokens": 215,
+      "outputTokens": 62,
+      "cacheReadTokens": 9600,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9877
+    },
+    {
+      "inputTokens": 460,
+      "outputTokens": 153,
+      "cacheReadTokens": 9856,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10469
+    },
+    {
+      "inputTokens": 158,
+      "outputTokens": 70,
+      "cacheReadTokens": 10368,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10596
+    },
+    {
+      "inputTokens": 674,
+      "outputTokens": 100,
+      "cacheReadTokens": 10496,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11270
+    },
+    {
+      "inputTokens": 434,
+      "outputTokens": 105,
+      "cacheReadTokens": 11264,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11803
+    },
+    {
+      "inputTokens": 216,
+      "outputTokens": 127,
+      "cacheReadTokens": 11648,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11991
+    },
+    {
+      "inputTokens": 528,
+      "outputTokens": 147,
+      "cacheReadTokens": 11904,
+      "cacheWriteTokens": 0,
+      "totalTokens": 12579
+    },
+    {
+      "inputTokens": 246,
+      "outputTokens": 121,
+      "cacheReadTokens": 12416,
+      "cacheWriteTokens": 0,
+      "totalTokens": 12783
+    },
+    {
+      "inputTokens": 170,
+      "outputTokens": 53,
+      "cacheReadTokens": 12672,
+      "cacheWriteTokens": 0,
+      "totalTokens": 12895
+    },
+    {
+      "inputTokens": 480,
+      "outputTokens": 155,
+      "cacheReadTokens": 12800,
+      "cacheWriteTokens": 0,
+      "totalTokens": 13435
+    },
+    {
+      "inputTokens": 214,
+      "outputTokens": 117,
+      "cacheReadTokens": 13312,
+      "cacheWriteTokens": 0,
+      "totalTokens": 13643
+    },
+    {
+      "inputTokens": 135,
+      "outputTokens": 633,
+      "cacheReadTokens": 13568,
+      "cacheWriteTokens": 0,
+      "totalTokens": 14336
+    }
+  ],
+  "imageCount": 0,
+  "sourceLinkCount": 6,
+  "sourceLinks": [
+    "https://www.amnh.org/explore/news-blogs/life-cycle-butterfly",
+    "http://scbg.cas.cn/hx/201809/t20180922_6734919.html",
+    "https://m.gmw.cn/2024-03/04/content_1303678120.htm",
+    "https://www.sciencelearn.org.nz/image_maps/48-monarch-butterfly-life-cycle",
+    "https://askabiologist.asu.edu/monarch-life-cycle",
+    "https://www.nationalgeographic.com/animals/article/science-of-metamorphosis-butterflies-caterpillars"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [],
+  "backend": []
+}

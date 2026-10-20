@@ -1,125 +1,101 @@
 # CiteWeave for DeepSeek Harness
 
-**Web evidence and sourced illustrations for DeepSeek Harness answers.**
+Web search with sourced images for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
 [![CI](https://github.com/wavachao/dsh-citeweave/actions/workflows/ci.yml/badge.svg)](https://github.com/wavachao/dsh-citeweave/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-235c45)](LICENSE)
-[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-0.2.1--rc.2-5369f8)](https://github.com/deepseek-ai/deepseek-harness)
 
-[简体中文](README.zh-CN.md) · [Backend setup](docs/backend.md) · [Reference](docs/reference.md) · [Releases](https://github.com/wavachao/dsh-citeweave/releases)
+[简体中文](README.zh-CN.md) · [Backend](https://github.com/wavachao/dsh-citeweave/tree/main/backend) · [Reference](docs/reference.md) · [Releases](https://github.com/wavachao/dsh-citeweave/releases)
 
-CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It retrieves webpage evidence, describes candidate images, and selects relevant illustrations. Harness writes the final answer with inline images and links to their original source pages.
+CiteWeave retrieves web evidence, evaluates candidate images, and supplies source links and illustrations to Harness. The configured DeepSeek model writes the answer, placing images beside the relevant explanation.
 
-The optional [12 GB GPU deployment](backend/README.md) uses a pinned Qwen3.5-9B community AWQ 4-bit model for local query assistance and image descriptions, with CPU ranking. Harness continues using its configured DeepSeek answer model. No new training is required.
+This repository contains the Harness plugin and its Python backend. The backend runs Qwen3.5-9B through vLLM, with CPU embeddings and reranking. Celery, Redis, and PostgreSQL handle retrieval jobs. On shared GPUs, the model starts on demand and releases memory after an idle period.
 
-For shared or continuous use, the [durable queue profile](backend/queue.md) adds Celery, a persistent Redis broker and PostgreSQL task results. A single worker processes retrieval jobs; existing plugin requests retain their response contract.
+## Examples
 
-The [shared-GPU lifecycle](backend/model-lifecycle.md) starts vLLM on demand and releases its GPU memory after inactivity. GPU contention or startup failure makes the tool unavailable; Harness continues without evidence from that failed call.
+**Geology** — Grand Canyon rock layers with a National Park Service diagram.
 
-- Search the web or retrieve up to five specified source pages.
-- Select images using visual descriptions and relevance ranking.
-- Store selected images in Harness's native attachment store and display them through its Markdown renderer.
-- Preserve structured image references for session attachment export.
-- Configure the backend in the shared Harness Desktop/Web plugin interface.
-- Keep the GPU backend separate from the plugin; no Harness source changes are required.
+![Grand Canyon geology answer with a sourced diagram](docs/images/geography.png)
 
-## Illustrated answers
+**Biology** — Monarch identification with a photograph of its wing markings.
 
-Geology, biology, and engineering examples with inline illustrations and source-page citations.
+![Monarch identification answer with a sourced photograph](docs/images/biology.png)
 
-**Grand Canyon geology** — rock layers explained alongside a retrieved National Park Service diagram.
+**Engineering** — A suspension bridge's load path, illustrated with the Golden Gate Bridge.
 
-![Harness answer explaining Grand Canyon rock layers with a geological diagram and source citation](docs/images/geography.png)
+![Bridge engineering answer with a sourced photograph](docs/images/engineering.png)
 
-**Monarch identification** — wing markings explained with a retrieved butterfly photograph.
-
-![Harness answer identifying monarch butterfly wing markings with a photograph and source citation](docs/images/biology.png)
-
-**Bridge engineering** — the Golden Gate Bridge's load path illustrated with a source photograph.
-
-![Harness answer explaining a suspension bridge's load path with a Golden Gate Bridge photograph and source citation](docs/images/engineering.png)
-
-Screenshots show Harness Web answers. Embedded images retain their original licenses; see [image credits](docs/images/README.md).
-
-## Requirements
-
-| Component | Supported version / requirement |
-| --- | --- |
-| DeepSeek Harness | `0.2.1-rc.2` |
-| Plugin host | Node.js 24 or later; Harness attachments and filesystem services |
-| CiteWeave backend | The [pinned evidence API revision](docs/backend.md), reachable from the Harness host |
-| Backend hardware | Linux, Python 3.12 and NVIDIA GPU; RTX 3060 12 GB with the Qwen3.5 vLLM profile, or RTX 4090 D 24 GB with the original local profile |
-
-Harness is under active development. This release declares compatibility with the exact version above. Installing the plugin does not install the Python backend or its model weights.
+[Image credits](docs/images/README.md)
 
 ## Installation
 
-### 1. Start CiteWeave
+### Backend
 
-Follow [backend setup](docs/backend.md) to deploy the pinned revision with `POST /api/evidence`. An existing backend must expose this endpoint; CiteWeave's `main` branch does not currently provide it.
+Deploy the service from [backend/](https://github.com/wavachao/dsh-citeweave/tree/main/backend). The reference configuration uses Linux, Python 3.12, Docker, an RTX 3060 12 GB, and 32 GB RAM.
 
-For local text and vision assistance on an RTX 3060 12 GB, use the [Qwen3.5 vLLM guide](backend/README.md). It includes an immutable model revision, pinned container, CPU ranker setup, and real evidence checks. Apply its optional adapter to a dedicated backend clone.
-
-### 2. Install the plugin
-
-Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
-
-```text
-github:wavachao/dsh-citeweave#v0.4.0
+```sh
+git clone https://github.com/wavachao/dsh-citeweave.git
+cd dsh-citeweave/backend
 ```
 
-Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
+Follow the [deployment guide](https://github.com/wavachao/dsh-citeweave/blob/main/backend/README.md) to install dependencies, download the models, and start the services.
 
-For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0). An npm publication is not required.
+### Harness plugin
 
-### 3. Connect Harness
+In Harness Desktop or Web, open **Plugins → Add plugin** and enter:
 
-Open **Plugins → Installed plugins → CiteWeave**, then open the component's **Configure CiteWeave** control and set:
+```text
+github:wavachao/dsh-citeweave#v0.5.0
+```
 
-- **Backend address** (`endpoint`): for example, `http://127.0.0.1:8765`.
-- **Access token** (`accessToken`): the backend's workspace token, if authentication is enabled.
-- **Timeout** (`timeoutMs`) and **Maximum images** (`maxImages`), if different from the defaults.
-
-Save the settings. New tool calls use them immediately; environment variables and a host restart are not required. The token input is masked and does not reveal the saved value. Leave it blank to retain the saved token, or use **Clear saved token** to remove it. If `CITEWEAVE_ACCESS_TOKEN` is set on the host, it remains the fallback after clearing.
-
-The configuration page connects to an existing backend; it does not start the GPU service or download its models. For a remote backend, use HTTPS or an SSH tunnel. The Harness host downloads the images; the browser does not need the backend credential.
-
-## Usage
-
-Ask a question that benefits from pictures:
-
-> Explain how Eratosthenes measured Earth's circumference. Include a relevant diagram and cite its source.
-
-> Compare suspension bridges and cable-stayed bridges, with photographs showing the structural differences.
-
-The tool's description and prompt guidance help Harness choose it for illustrated answers. Tool selection and the final wording depend on the active answer model. CiteWeave returns evidence and images rather than generating a second answer.
-
-The tool accepts a search query, optional source URLs, image verification, and cache refresh. See the [tool reference](docs/reference.md#citeweave_search).
-
-## Configuration
+Open **Installed plugins → CiteWeave → Configure CiteWeave**, enter the backend address and workspace access token, then save.
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `endpoint` | `CITEWEAVE_ENDPOINT` or `http://127.0.0.1:8765` | Backend service origin. |
-| `accessToken` | `CITEWEAVE_ACCESS_TOKEN` or empty | Backend workspace token, sent as a Bearer credential. |
-| `timeoutMs` | `300000` | Total tool timeout in milliseconds. |
-| `maxImages` | `3` | Maximum images per search; range 1–8. |
+| `endpoint` | `http://127.0.0.1:8765` | Backend address; also accepts `CITEWEAVE_ENDPOINT`. |
+| `accessToken` | Empty | Workspace token; also accepts `CITEWEAVE_ACCESS_TOKEN`. |
+| `timeoutMs` | `300000` | Tool timeout in milliseconds. |
+| `maxImages` | `3` | Maximum images per search, from 1 to 8. |
 
-Non-empty plugin settings take precedence over environment variables. [Environment variables and configuration patches](docs/reference.md#advanced-configuration) remain available for managed deployments.
+The token field preserves the saved value when left blank. Command-line installation and environment configuration are covered in the [reference](docs/reference.md).
 
-## Operation and limitations
+## Usage
 
-- The backend needs outbound access to public webpages and its configured search provider. Page availability, image quality, and retrieval coverage vary.
-- When no suitable image is found, the tool returns text evidence without pictures. Individual image download failures are reported with the remaining evidence.
-- Images are copied into Harness storage and included as native attachment references in tool results. Final-answer Markdown uses paths resolved by the active Harness filesystem. A filesystem provider must expose these files to the renderer; importing a session on another host may require path adaptation.
-- The backend serializes GPU work. A busy worker returns `409`; wait for the active request before retrying. First-use model loading may require a longer timeout.
-- Queries and supplied URLs are sent to the configured backend. Its search provider and source websites receive the corresponding retrieval requests. See [security and data handling](SECURITY.md).
-- Source attribution does not grant permission to reuse an image. Retrieved material retains its original license.
+> Explain how Eratosthenes measured Earth's circumference. Include a diagram and cite its source.
+
+> Compare suspension bridges and cable-stayed bridges, with photographs showing their structural differences.
+
+Harness calls `citeweave_search`, incorporates the evidence, and embeds images through its attachment store. The tool supports automatic search, up to five source URLs, image verification, and cache refresh. See the [tool reference](docs/reference.md#citeweave_search).
+
+If the backend is unavailable, Harness continues answering without that tool result. Retrieval coverage and image availability depend on the source websites.
+
+## Evaluation
+
+The [Harness comparison](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks) measures answers with and without CiteWeave using the same DeepSeek model. Timed runs start with the visual model ready; model startup and GPU shutdown are outside the measurement. Prompts, answers, and evaluation criteria accompany the results.
+
+| Question | Harness | Harness + CiteWeave | Inline images, off / on |
+| --- | ---: | ---: | ---: |
+| Eratosthenes' measurement | 32.04 s | 43.03 s | 0 / 1 |
+| Butterfly life cycle | 46.04 s | 45.40 s | 0 / 2 |
+| HDD and SSD structure | 38.38 s | 52.30 s | 0 / 2 |
+
+Mean answer time across two runs per condition. In this environment, local fake-IP DNS blocked native `web_fetch`; the report records that limitation alongside the factual and image review.
+
+## Project structure
+
+| Path | Contents |
+| --- | --- |
+| [index.js](index.js), [client.js](client.js) | Harness tool and configuration interface |
+| [backend/src/citeweave/](https://github.com/wavachao/dsh-citeweave/tree/main/backend/src/citeweave) | Retrieval API, worker, ranking, and model lifecycle |
+| [backend/](https://github.com/wavachao/dsh-citeweave/tree/main/backend) | Python package, deployment configuration, and tests |
+| [benchmarks/](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks) | Harness comparison and measurements |
+
+The plugin targets Harness `0.2.1-rc.2` and Node.js 24+. Plugin and backend source share versioned releases; the installation archive contains the Harness plugin. Backend deployments use the matching repository tag.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for local installation, tests, packaging, and integration checks. Report reproducible bugs through [GitHub Issues](https://github.com/wavachao/dsh-citeweave/issues); report vulnerabilities privately using [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](https://github.com/wavachao/dsh-citeweave/blob/main/CONTRIBUTING.md) for development and tests. Report bugs through [GitHub Issues](https://github.com/wavachao/dsh-citeweave/issues), and vulnerabilities through [SECURITY.md](https://github.com/wavachao/dsh-citeweave/blob/main/SECURITY.md).
 
 ## License
 
-[MIT](LICENSE). This is an independent integration for DeepSeek Harness, powered by [CiteWeave](https://github.com/wavachao/citeweave). DeepSeek Harness, backend models, and retrieved content retain their respective licenses.
+[MIT](LICENSE). Based on [CiteWeave](https://github.com/wavachao/citeweave). Model and third-party resource licenses are listed in [backend/THIRD_PARTY.md](https://github.com/wavachao/dsh-citeweave/blob/main/backend/THIRD_PARTY.md); retrieved images retain their original licenses.

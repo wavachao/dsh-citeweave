@@ -1,0 +1,263 @@
+{
+  "id": "storage-off-r2",
+  "case": "storage",
+  "enabled": false,
+  "repeat": 2,
+  "turnSeconds": 28.58,
+  "processSeconds": 30.034,
+  "firstAssistantTextSeconds": 28.579,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 913,
+    "warmupSeconds": 0.19501616497291252,
+    "checkedAt": 1792514950.2525957
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_Mb3iwDq8Lal4u44h4Vhe2521",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "HDD 内部结构 磁盘片 磁头 寻道 示意图",
+          "SSD 内部结构 NAND闪存 主控 示意图",
+          "HDD vs SSD random read latency seeking reliability shock"
+        ]
+      },
+      "relativeSeconds": 0.96,
+      "seconds": 7.016
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_yGJUECdeswR0RPTKwvQX3371",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Hard_disk_drive_internal.jpg"
+      },
+      "relativeSeconds": 8.896,
+      "seconds": 0.013
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_5PZUC2nXp0NjExCkyU8B6883",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "wikimedia commons hard disk drive internals photo platters actuator arm",
+          "wikimedia commons solid state drive internals NAND chips photo",
+          "SSD 写入放大 磨损均衡 寿命 原因"
+        ]
+      },
+      "relativeSeconds": 8.897,
+      "seconds": 7.78
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_qy2btCQcXZ6TRWunpM4i3764",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://commons.wikimedia.org/wiki/Category:Disassembled_Seagate_ST160LM003_Momentus"
+      },
+      "relativeSeconds": 17.712,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_vR4OlQfw1braPlIM0yqS5453",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://raw.githubusercontent.com/MattCheramie/GopherTrunk/1b8e3537d80d35a115bf67d0bffc51ad36460562/docs/reference/solid-state-drive.md"
+      },
+      "relativeSeconds": 17.712,
+      "seconds": 0.01
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_02_B37pX5BQ5H9yOkA2GRyb9325",
+      "tool": "web_fetch",
+      "input": {
+        "url": "http://carl.sandiego.edu/bus188/inside_a_hard_disk.htm"
+      },
+      "relativeSeconds": 17.713,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_WxVtYPxq5Pj56g5TpcGf8637",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:Phison_PS3111-S11_SSD_controller.jpg"
+      },
+      "relativeSeconds": 18.992,
+      "seconds": 0.021
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_p135hrMouMlrl0ehLsSr2940",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.pconline.com.cn/ask/755809.html"
+      },
+      "relativeSeconds": 18.993,
+      "seconds": 0.02
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_02_kuWYV8bZgDorwltEYwG88980",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "硬盘 HDD SSD 结构对比 图片 磁道 扇区 闪存颗粒",
+          "SSD shock resistance HDD G-shock rating operating",
+          "HDD SMART 寿命 机械故障 磁头 盘片 磨损 SSD TBW P/E 次数"
+        ]
+      },
+      "relativeSeconds": 18.993,
+      "seconds": 4.843
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_Qt8703m93Jmzx7AYzmlX8863",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://bbs.huaweicloud.com/blogs/350663"
+      },
+      "relativeSeconds": 24.792,
+      "seconds": 0.029
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_jJpFVwp0PrnjVvwagecu9678",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.kingston.com.cn/en/blog/personal-storage/ssds-hdds-lifespan"
+      },
+      "relativeSeconds": 24.793,
+      "seconds": 0.028
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_02_Ynwtb7jbuk5Qe5lqjMtA6110",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://aspectix.informatik.uni-erlangen.de/Lehre/WS20/V_SP2/Vorlesung/Folien/SP2-13-A6.pdf"
+      },
+      "relativeSeconds": 24.794,
+      "seconds": 0.027
+    }
+  ],
+  "toolErrors": [
+    {
+      "type": "tool_result",
+      "callId": "call_00_yGJUECdeswR0RPTKwvQX3371",
+      "status": "error",
+      "result": "Error: URL hostname \"upload.wikimedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_qy2btCQcXZ6TRWunpM4i3764",
+      "status": "error",
+      "result": "Error: URL hostname \"commons.wikimedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_vR4OlQfw1braPlIM0yqS5453",
+      "status": "error",
+      "result": "Error: URL hostname \"raw.githubusercontent.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_02_B37pX5BQ5H9yOkA2GRyb9325",
+      "status": "error",
+      "result": "Error: URL hostname \"carl.sandiego.edu\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_WxVtYPxq5Pj56g5TpcGf8637",
+      "status": "error",
+      "result": "Error: URL hostname \"ja.wikipedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_p135hrMouMlrl0ehLsSr2940",
+      "status": "error",
+      "result": "Error: URL hostname \"www.pconline.com.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_Qt8703m93Jmzx7AYzmlX8863",
+      "status": "error",
+      "result": "Error: URL hostname \"bbs.huaweicloud.com\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_jJpFVwp0PrnjVvwagecu9678",
+      "status": "error",
+      "result": "Error: URL hostname \"www.kingston.com.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_02_Ynwtb7jbuk5Qe5lqjMtA6110",
+      "status": "error",
+      "result": "Error: URL hostname \"aspectix.informatik.uni-erlangen.de\" resolves to a non-public IP address"
+    }
+  ],
+  "usage": [
+    {
+      "inputTokens": 243,
+      "outputTokens": 83,
+      "cacheReadTokens": 6272,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6598
+    },
+    {
+      "inputTokens": 498,
+      "outputTokens": 133,
+      "cacheReadTokens": 6528,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7159
+    },
+    {
+      "inputTokens": 555,
+      "outputTokens": 185,
+      "cacheReadTokens": 7040,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7780
+    },
+    {
+      "inputTokens": 184,
+      "outputTokens": 212,
+      "cacheReadTokens": 7680,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8076
+    },
+    {
+      "inputTokens": 488,
+      "outputTokens": 170,
+      "cacheReadTokens": 8064,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8722
+    },
+    {
+      "inputTokens": 241,
+      "outputTokens": 625,
+      "cacheReadTokens": 8576,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9442
+    }
+  ],
+  "imageCount": 0,
+  "sourceLinkCount": 3,
+  "sourceLinks": [
+    "https://bbs.huaweicloud.com/blogs/350663",
+    "https://www.kingston.com.cn/en/blog/personal-storage/ssds-hdds-lifespan",
+    "https://aspectix.informatik.uni-erlangen.de/Lehre/WS20/V_SP2/Vorlesung/Folien/SP2-13-A6.pdf"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [],
+  "backend": []
+}

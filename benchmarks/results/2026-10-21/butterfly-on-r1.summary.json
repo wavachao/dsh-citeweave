@@ -1,0 +1,136 @@
+{
+  "id": "butterfly-on-r1",
+  "case": "butterfly",
+  "enabled": true,
+  "repeat": 1,
+  "turnSeconds": 59.361,
+  "processSeconds": 60.884,
+  "firstAssistantTextSeconds": 59.361,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 967,
+    "warmupSeconds": 0.23409340798389167,
+    "checkedAt": 1792514497.752335
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_yXaHiTiwAu5gk6f2reMW8030",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "蝴蝶完全变态 卵 幼虫 蛹 成虫 各阶段形态与作用",
+        "refresh": true
+      },
+      "relativeSeconds": 0.965,
+      "seconds": 52.746
+    }
+  ],
+  "toolErrors": [],
+  "usage": [
+    {
+      "inputTokens": 838,
+      "outputTokens": 72,
+      "cacheReadTokens": 6016,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6926
+    },
+    {
+      "inputTokens": 3823,
+      "outputTokens": 984,
+      "cacheReadTokens": 6912,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11719
+    }
+  ],
+  "imageCount": 2,
+  "sourceLinkCount": 4,
+  "sourceLinks": [
+    "https://askabiologist.asu.edu/complete-metamorphosis",
+    "https://www.typesofbutterflies.com/butterfly-metamorphosis/",
+    "https://zooologist.com/the-life-cycle-of-a-butterfly/",
+    "https://butterfliesofcrete.com/life-cycle-of-a-butterfly/"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [
+    {
+      "attachmentObject": "57f0363eddd1c56fa49e2822105b6b25a1203a99f6aa365402ddf9cd1596d73e",
+      "originalImageUrl": "https://askabiologist.asu.edu/sites/default/files/resources/articles/monarchs/complete-metamorphosis.gif"
+    },
+    {
+      "attachmentObject": "51c1cc74fa6b0ce63dfae140003d857bf6d63b8aff28de32bc9ee665259a682d",
+      "originalImageUrl": "https://www.typesofbutterflies.com/wp-content/uploads/2026/04/butterfly-metamorphosis-2.webp"
+    }
+  ],
+  "backend": [
+    {
+      "serial": 4,
+      "status": 200,
+      "seconds": 52.668,
+      "request": {
+        "query": "蝴蝶完全变态 卵 幼虫 蛹 成虫 各阶段形态与作用",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [
+        {
+          "id": "s0",
+          "title": "Complete Metamorphosis in Insects | Ask A Biologist",
+          "url": "https://askabiologist.asu.edu/complete-metamorphosis"
+        },
+        {
+          "id": "s1",
+          "title": "The Life Cycle of a Butterfly - Egg Stage, Larva Stage, Pupa Stage & Adult Stage",
+          "url": "https://zooologist.com/the-life-cycle-of-a-butterfly/"
+        },
+        {
+          "id": "s2",
+          "title": "The life cycle of a butterfly. Egg, larva, pupa, adult - butterfliesofcrete.com",
+          "url": "https://butterfliesofcrete.com/life-cycle-of-a-butterfly/"
+        },
+        {
+          "id": "s3",
+          "title": "Butterfly Metamorphosis Explained: Stages, Science, and Meaning",
+          "url": "https://www.typesofbutterflies.com/butterfly-metamorphosis/"
+        }
+      ],
+      "images": [
+        {
+          "id": "i1",
+          "url": "https://askabiologist.asu.edu/sites/default/files/resources/articles/monarchs/complete-metamorphosis.gif",
+          "source_id": "s0",
+          "source_url": "https://askabiologist.asu.edu/complete-metamorphosis",
+          "caption_kind": "api_visual_description",
+          "caption": "The image displays the four stages of a butterfly’s life cycle: Egg (1), Larva (2), Pupa (3), and Adult (4). Each stage is illustrated with a clear, labeled diagram showing the transformation from egg to caterpillar, then to chrysalis, and finally to the adult butterfly."
+        },
+        {
+          "id": "i16",
+          "url": "https://www.typesofbutterflies.com/wp-content/uploads/2026/04/butterfly-metamorphosis-2.webp",
+          "source_id": "s3",
+          "source_url": "https://www.typesofbutterflies.com/butterfly-metamorphosis/",
+          "caption_kind": "api_visual_description",
+          "caption": "This image is an educational diagram titled \"Life Cycle of a Butterfly\" that illustrates the four main stages: Eggs hatching into caterpillars (Larva), which then form a Chrysalis (Pupa) before emerging as an Adult Butterfly. Each stage is depicted with a labeled illustration and brief descriptive text, such as the caterpillar feeding on leaves and the adult butterfly laying eggs. The cycle is shown in a circular flow with arrows indicating progression from one stage to the next."
+        },
+        {
+          "id": "i15",
+          "url": "https://www.typesofbutterflies.com/wp-content/uploads/2026/04/butterfly-metamorphosis-1-1024x683.webp",
+          "source_id": "s3",
+          "source_url": "https://www.typesofbutterflies.com/butterfly-metamorphosis/",
+          "caption_kind": "api_visual_description",
+          "caption": "The image displays a butterfly life cycle on plant stems, featuring a green caterpillar with black spots on the left, a chrysalis in the center, and an adult yellow and black butterfly on the right. The background is a soft-focus green, emphasizing the natural setting of metamorphosis."
+        }
+      ],
+      "retrievalErrors": [
+        {
+          "url": "https://www.amnh.org/explore/news-blogs/life-cycle-butterfly",
+          "error": "HTTP 403 while retrieving https://www.amnh.org/explore/news-blogs/life-cycle-butterfly"
+        }
+      ]
+    }
+  ]
+}

@@ -40,14 +40,10 @@ worker loss. Graceful service restarts allow running work to finish.
 
 ## Install
 
-Complete the [vLLM backend setup](README.md) in a dedicated backend checkout,
-including the adapter patch and ranking assets. Install the queue's additional
-dependencies using its hash-locked requirements:
-
-```sh
-uv pip install --python .venv/bin/python --require-hashes \
-  -r "$CITEWEAVE_PLUGIN_DIR/backend/requirements-queue.txt"
-```
+Complete the [vLLM backend setup](README.md), including model and ranking
+assets. Run these commands from this repository's `backend/` directory.
+`uv sync --frozen --no-dev` installs all queue dependencies from `uv.lock`;
+no additional dependency installation is required.
 
 Create a private `queue.env` with two independently generated passwords:
 
@@ -62,7 +58,7 @@ database and broker containers:
 
 ```sh
 docker compose --env-file queue.env \
-  -f "$CITEWEAVE_PLUGIN_DIR/backend/queue-compose.yml" up -d --wait
+  -f queue-compose.yml up -d --wait
 ```
 
 Add the following to the backend's `.env`, substituting the same passwords:
@@ -102,15 +98,15 @@ It enables backoff and retry while the worker records results during a temporary
 database outage. API processes keep bounded database reads and return a task ID
 when storage is unavailable.
 
-Restart the API with queue mode enabled. Use `.venv/bin/python` or
-`uv run --no-sync` after installing the queue dependencies. Running a strict
-sync against the original upstream lock can remove these optional dependencies.
+Restart the API with queue mode enabled. The API, worker and scheduler use
+the same locked environment. `uv sync --frozen --no-dev` preserves their
+dependencies.
 
 ### systemd user services
 
 The [service templates](systemd/) supervise the API, worker, scheduler and optional model lifecycle. In
 each template, replace `/srv/citeweave-backend` with the absolute path of the
-backend clone owned by the service user. For the on-demand profile, copy all four files to
+backend directory owned by the service user. For the on-demand profile, copy all four files to
 `~/.config/systemd/user/` and start them:
 
 ```sh

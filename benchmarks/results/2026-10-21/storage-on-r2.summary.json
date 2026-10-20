@@ -1,0 +1,190 @@
+{
+  "id": "storage-on-r2",
+  "case": "storage",
+  "enabled": true,
+  "repeat": 2,
+  "turnSeconds": 53.358,
+  "processSeconds": 54.797,
+  "firstAssistantTextSeconds": 53.358,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 915,
+    "warmupSeconds": 0.1950702109897975,
+    "checkedAt": 1792514894.7292502
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_uKEIEp7Pr5oi4MqXkkpg1658",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "HDD 机械硬盘 内部结构 盘片 磁头 工作原理",
+        "refresh": true
+      },
+      "relativeSeconds": 1.171,
+      "seconds": 23.453
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_POR9RvCGU3raubcxFvzK6880",
+      "tool": "citeweave_search",
+      "input": {
+        "query": "SSD 固态硬盘 内部结构 NAND 闪存 主控 工作方式",
+        "refresh": true
+      },
+      "relativeSeconds": 24.624,
+      "seconds": 24.431
+    }
+  ],
+  "toolErrors": [],
+  "usage": [
+    {
+      "inputTokens": 204,
+      "outputTokens": 134,
+      "cacheReadTokens": 6656,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6994
+    },
+    {
+      "inputTokens": 6853,
+      "outputTokens": 811,
+      "cacheReadTokens": 6912,
+      "cacheWriteTokens": 0,
+      "totalTokens": 14576
+    }
+  ],
+  "imageCount": 2,
+  "sourceLinkCount": 5,
+  "sourceLinks": [
+    "https://en.wikipedia.org/wiki/Disk_read-and-write_head",
+    "https://www.stellarinfo.co.in/hdd/key-components-of-hard-drive.php",
+    "https://semiconductor.samsung.com/support/tools-resources/dictionary/semiconductors-101-part-3-inner-workings-of-the-ssd/",
+    "https://www.ssstc.com/knowledge-detail/how-ssds-work-guide/",
+    "https://www.linkedin.com/pulse/ssd-internal-structure-explained-controller-nand-nlgac"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [
+    {
+      "attachmentObject": "b074e1782f0111d61d843335f651c3a202b49d9bb516ac75a10757d88a20db1c",
+      "originalImageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Seagate_ST33232A_hard_disk_head_and_platters_detail.jpg/250px-Seagate_ST33232A_hard_disk_head_and_platters_detail.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+    },
+    {
+      "attachmentObject": "b639f76495cc006d49dab30ffb38ad487915dff1ae225e24864d7263974ed52b",
+      "originalImageUrl": "https://media.licdn.com/dms/image/v2/D5612AQE12ZVoQB05HQ/article-cover_image-shrink_720_1280/B56Z1wPWoEGwAM-/0/1775704576626?e=2147483647&v=beta&t=D8N1aEbmCIn3qqAZtsjOya3xcA2gg1AC-ni9On00WcE"
+    }
+  ],
+  "backend": [
+    {
+      "serial": 21,
+      "status": 200,
+      "seconds": 23.382,
+      "request": {
+        "query": "HDD 机械硬盘 内部结构 盘片 磁头 工作原理",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [
+        {
+          "id": "s0",
+          "title": "Disk read-and-write head - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Disk_read-and-write_head"
+        },
+        {
+          "id": "s1",
+          "title": "Hard Disk Drives - Components of a Hard Drive: Head, Platter, PCB",
+          "url": "https://www.stellarinfo.co.in/hdd/key-components-of-hard-drive.php"
+        },
+        {
+          "id": "s2",
+          "title": "Hard Disk Drive (HDD) Secondary Memory - GeeksforGeeks",
+          "url": "https://www.geeksforgeeks.org/computer-organization-architecture/hard-disk-drive-hdd-secondary-memory/"
+        },
+        {
+          "id": "s3",
+          "title": "Hard Disk Drives - Key Components of a Hard Drive: Head, Platter, PCB, etc.",
+          "url": "https://www.stellardatarecovery.co.uk/knowledge-base/key-components-of-hard-drive.htm"
+        }
+      ],
+      "images": [
+        {
+          "id": "i0",
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Seagate_ST33232A_hard_disk_head_and_platters_detail.jpg/250px-Seagate_ST33232A_hard_disk_head_and_platters_detail.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "source_id": "s0",
+          "source_url": "https://en.wikipedia.org/wiki/Disk_read-and-write_head",
+          "caption_kind": "api_visual_description",
+          "caption": "This image shows a close-up view of the internal components of a hard disk drive, including the shiny metallic platters and the actuator arm with its read/write head. The actuator arm is positioned over the platters, which are stacked and separated by thin spacers. The image highlights the precision engineering of the drive's mechanical parts, with visible screws and the edge of the circuit board on the left side."
+        },
+        {
+          "id": "i4",
+          "url": "https://www.stellarinfo.co.in/image/catalog/knowledge-base/service/inside-hdd/Stellar_Sectors.jpg",
+          "source_id": "s1",
+          "source_url": "https://www.stellarinfo.co.in/hdd/key-components-of-hard-drive.php",
+          "caption_kind": "api_visual_description",
+          "caption": "The image displays a hard disk drive platter with its top surface exposed, revealing concentric circular tracks and highlighted blue sectors. Red lines point to these features, labeled \"Sectors\" and \"Tracks\" respectively, while a smaller component with multiple holes sits to the left."
+        }
+      ],
+      "retrievalErrors": [
+        {
+          "url": "https://scienceinsights.org/what-is-a-magnetic-hard-drive-and-how-does-it-work/",
+          "error": "HTTP 403 while retrieving https://scienceinsights.org/what-is-a-magnetic-hard-drive-and-how-does-it-work/"
+        }
+      ]
+    },
+    {
+      "serial": 24,
+      "status": 200,
+      "seconds": 24.385,
+      "request": {
+        "query": "SSD 固态硬盘 内部结构 NAND 闪存 主控 工作方式",
+        "verify_images": true,
+        "refresh": true,
+        "max_images": 3
+      },
+      "cacheHit": false,
+      "sources": [
+        {
+          "id": "s0",
+          "title": "The key components of an SSD | Samsung Semiconductor Global",
+          "url": "https://semiconductor.samsung.com/support/tools-resources/dictionary/semiconductors-101-part-3-inner-workings-of-the-ssd/"
+        },
+        {
+          "id": "s1",
+          "title": "SSD Internal Structure Explained: Controller NAND DRAM",
+          "url": "https://www.linkedin.com/pulse/ssd-internal-structure-explained-controller-nand-nlgac"
+        },
+        {
+          "id": "s2",
+          "title": "Inside SSDs: The Comprehensive Guide to How Solid-State Drives Operate",
+          "url": "https://www.ssstc.com/knowledge-detail/how-ssds-work-guide/"
+        },
+        {
+          "id": "s3",
+          "title": "Unraveling SSDs: Exploring the Crucial Components of Solid State Drives",
+          "url": "https://www.ssstc.com/knowledge-detail/ssd-components-explained/"
+        },
+        {
+          "id": "s4",
+          "title": "How Solid State Drives (SSDs) Work: An In-Depth Look at NAND Flash Memory | Computer Science KB",
+          "url": "https://faq.computersciencewiki.org/index.php/home/article/how-solid-state-drives-ssds-work-an-in-depth-look-at-nand-flash-memory"
+        }
+      ],
+      "images": [
+        {
+          "id": "i1",
+          "url": "https://media.licdn.com/dms/image/v2/D5612AQE12ZVoQB05HQ/article-cover_image-shrink_720_1280/B56Z1wPWoEGwAM-/0/1775704576626?e=2147483647&v=beta&t=D8N1aEbmCIn3qqAZtsjOya3xcA2gg1AC-ni9On00WcE",
+          "source_id": "s1",
+          "source_url": "https://www.linkedin.com/pulse/ssd-internal-structure-explained-controller-nand-nlgac",
+          "caption_kind": "api_visual_description",
+          "caption": "The image displays a presentation slide from \"unzeTech\" titled \"Controller NAND DRAM,\" with the subtitle \"SSD Internal Structure Explained.\" On the right side, there is a photograph of an SSD (Solid State Drive) placed on a desk, with a laptop and other office items in the background. The SSD has visible components labeled \"SEYUNZE.COM.\""
+        }
+      ],
+      "retrievalErrors": []
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "id": "earth-off-r2",
+  "case": "earth",
+  "enabled": false,
+  "repeat": 2,
+  "turnSeconds": 37.55,
+  "processSeconds": 38.956,
+  "firstAssistantTextSeconds": 37.55,
+  "completed": true,
+  "exitCode": 0,
+  "readiness": {
+    "healthy": true,
+    "running": true,
+    "containerStarted": "2026-10-20T16:38:55.016964877Z",
+    "freeGpuMiB": 915,
+    "warmupSeconds": 0.23511553500429727,
+    "checkedAt": 1792514752.3148186
+  },
+  "tools": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_QK4U4XzLnQXRWH2FHW3R2744",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Eratosthenes earth circumference measurement 7.2 degrees Alexandria Syene",
+          "埃拉托色尼 测量地球周长 日影 7.2度",
+          "Eratosthenes earth circumference diagram illustration"
+        ]
+      },
+      "relativeSeconds": 1.172,
+      "seconds": 5.104
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_McmLpMg6QnwmDUzflsGR1967",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://aether.lbl.gov/www/tour/greek/greek.html"
+      },
+      "relativeSeconds": 7.296,
+      "seconds": 0.012
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_vBxiHvIpJUYgQsHeMZ0c3884",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://cloud.kepuchina.cn/h5/detail?id=6969202823933456384"
+      },
+      "relativeSeconds": 7.297,
+      "seconds": 0.011
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_ZUB5Dvi8Nl8giaGm86QH0583",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Eratosthenes shadows Alexandria Syene diagram site:commons.wikimedia.org",
+          "Eratosthenes Earth circumference image file commons"
+        ]
+      },
+      "relativeSeconds": 8.279,
+      "seconds": 5.289
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_wxgA1Rpj7ykWn00LdpVZ6838",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://commons.wikimedia.org/wiki/File:Eratosthenes_measure_of_Earth_circumference.svg"
+      },
+      "relativeSeconds": 14.245,
+      "seconds": 0.016
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_GAgXP1LjW9BtCq7u3s6Q2422",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "upload.wikimedia.org Eratosthenes_measure_of_Earth_circumference.svg png",
+          "Eratosthenes measurement earth circumference illustration upload.wikimedia.org"
+        ]
+      },
+      "relativeSeconds": 15.057,
+      "seconds": 3.643
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_blrMfIDj6l0jlha3XYME7374",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.windows2universe.org/?page=/citizen_science/myw/w2u_eratosthenes_calc_earth_size.html"
+      },
+      "relativeSeconds": 19.554,
+      "seconds": 0.02
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_TitByOhpndY3EaW1LvHo9888",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://www.physics.unlv.edu/~jeffery/astro/ancient_astronomy/eratosthenes.html"
+      },
+      "relativeSeconds": 19.555,
+      "seconds": 0.019
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_1SHsjag9TwclGj68H08K3420",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          " astronomy education Eratosthenes earth circumference image jpg",
+          "satellite image Nile delta Alexandria Egypt NASA Earth Observatory image"
+        ]
+      },
+      "relativeSeconds": 20.428,
+      "seconds": 5.411
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_PpseAGAUps61bdYhSw432300",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/Eratosthenes"
+      },
+      "relativeSeconds": 26.802,
+      "seconds": 0.009
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_01_sWXJrmkLGEf7qDzgkoO37194",
+      "tool": "web_fetch",
+      "input": {
+        "url": "https://noaateacheratsea.blog/2013/06/30/robert-ulmer-june-28-know-your-surroundings/eratostheness-proof-of-earths-circumference-university-of-houston/"
+      },
+      "relativeSeconds": 26.803,
+      "seconds": 0.008
+    },
+    {
+      "type": "tool_call",
+      "callId": "call_00_GPSiCSHOrKVRzvcBBoh16712",
+      "tool": "web_search",
+      "input": {
+        "queries": [
+          "Eratosthenes earth circumference 7.2 degrees 5000 stadia 250000 stadia",
+          "Eratosthenes Alexandria Syene same meridian well shadow 7.2"
+        ]
+      },
+      "relativeSeconds": 27.769,
+      "seconds": 4.53
+    }
+  ],
+  "toolErrors": [
+    {
+      "type": "tool_result",
+      "callId": "call_00_McmLpMg6QnwmDUzflsGR1967",
+      "status": "error",
+      "result": "Error: URL hostname \"aether.lbl.gov\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_vBxiHvIpJUYgQsHeMZ0c3884",
+      "status": "error",
+      "result": "Error: URL hostname \"cloud.kepuchina.cn\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_wxgA1Rpj7ykWn00LdpVZ6838",
+      "status": "error",
+      "result": "Error: URL hostname \"commons.wikimedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_blrMfIDj6l0jlha3XYME7374",
+      "status": "error",
+      "result": "Error: URL hostname \"www.windows2universe.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_TitByOhpndY3EaW1LvHo9888",
+      "status": "error",
+      "result": "Error: URL hostname \"www.physics.unlv.edu\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_00_PpseAGAUps61bdYhSw432300",
+      "status": "error",
+      "result": "Error: URL hostname \"en.wikipedia.org\" resolves to a non-public IP address"
+    },
+    {
+      "type": "tool_result",
+      "callId": "call_01_sWXJrmkLGEf7qDzgkoO37194",
+      "status": "error",
+      "result": "Error: URL hostname \"noaateacheratsea.blog\" resolves to a non-public IP address"
+    }
+  ],
+  "usage": [
+    {
+      "inputTokens": 242,
+      "outputTokens": 83,
+      "cacheReadTokens": 6272,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6597
+    },
+    {
+      "inputTokens": 524,
+      "outputTokens": 101,
+      "cacheReadTokens": 6528,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7153
+    },
+    {
+      "inputTokens": 172,
+      "outputTokens": 66,
+      "cacheReadTokens": 7040,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7278
+    },
+    {
+      "inputTokens": 649,
+      "outputTokens": 60,
+      "cacheReadTokens": 7168,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7877
+    },
+    {
+      "inputTokens": 228,
+      "outputTokens": 74,
+      "cacheReadTokens": 7680,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7982
+    },
+    {
+      "inputTokens": 540,
+      "outputTokens": 120,
+      "cacheReadTokens": 7936,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8596
+    },
+    {
+      "inputTokens": 209,
+      "outputTokens": 63,
+      "cacheReadTokens": 8448,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8720
+    },
+    {
+      "inputTokens": 573,
+      "outputTokens": 124,
+      "cacheReadTokens": 8704,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9401
+    },
+    {
+      "inputTokens": 243,
+      "outputTokens": 78,
+      "cacheReadTokens": 9216,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9537
+    },
+    {
+      "inputTokens": 499,
+      "outputTokens": 903,
+      "cacheReadTokens": 9472,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10874
+    }
+  ],
+  "imageCount": 0,
+  "sourceLinkCount": 6,
+  "sourceLinks": [
+    "https://aether.lbl.gov/www/tour/greek/greek.html",
+    "https://cloud.kepuchina.cn/search/imgText?id=295141",
+    "https://cloud.kepuchina.cn/h5/detail?id=6969202823933456384",
+    "https://astro.ucas.ac.cn/index.php/en/2016-03-17-01-43-40/2021-09-27-03-24-58/203-2018-12-28-01-52-03",
+    "https://commons.wikimedia.org/wiki/File:Eratosthenes_measure_of_Earth_circumference.svg",
+    "https://www.lookandlearn.com/history-images/M774502/Diagram-of-Eratosthenes%E2%80%99-method-for-calculating-the-Earth%E2%80%99s-circumference-using-Alexandria-and-First-Cataract"
+  ],
+  "imageDestinationTransformation": "Only local attachment destinations in published answer Markdown were replaced by exact Original image URLs from the stored tool result. All counts use the original final Markdown.",
+  "imageMappings": [],
+  "backend": []
+}

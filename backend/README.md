@@ -2,11 +2,15 @@
 
 [Plugin README](../README.md) · [Backend options](../docs/backend.md) · [中文说明](#中文说明)
 
-This deployment runs CiteWeave's query assistance and image descriptions on a local Qwen3.5-9B community AWQ 4-bit model. Embeddings and the existing released CrossEncoder run on the CPU. The final Harness answer continues to use its configured DeepSeek model; installing this backend does not change that provider. No model training or fine-tuning is required.
+The backend retrieves web evidence, describes images with Qwen3.5-9B through
+vLLM, and ranks candidates on CPU. It serves `POST /api/evidence` for the DSH
+plugin and `POST /api/search` for the included web application.
 
-The included adapter is an optional patch for CiteWeave revision [`f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24`](https://github.com/wavachao/citeweave/tree/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24). Apply it to a separate backend checkout. The plugin protocol remains `POST /api/evidence`, so compatible deployments can continue using their current backend.
+Complete application source, the durable queue and shared-GPU lifecycle are
+included here. See [THIRD_PARTY.md](THIRD_PARTY.md) for upstream provenance and
+licenses.
 
-## Pinned deployment
+## Model configuration
 
 | Component | Configuration |
 | --- | --- |
@@ -21,49 +25,49 @@ The included adapter is an optional patch for CiteWeave revision [`f6ac71eb6fe63
 | Visual input | One image per model request, at most 262,144 pixels |
 | Ranking | Existing embedding model and released CrossEncoder on CPU |
 
-The weights are published by a community distributor, rather than an official Qwen INT4 release. The model card identifies the Apache-2.0 license. The downloader preserves the upstream model files, license and README, and records the repository and revision in `source.json`.
-
-Keep automatic quantization detection. The repository name contains `AWQ`, but its stored configuration uses `compressed-tensors`; do not add `--quantization awq` to the serving command.
+Use automatic quantization detection: this snapshot stores
+`compressed-tensors`, which vLLM serves with its Marlin kernel.
 
 ## Requirements
 
 - Linux, Python 3.12, [uv](https://docs.astral.sh/uv/), Docker Compose with GPU support, and [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
 - A 12 GB NVIDIA GPU and sufficient host RAM for Python and CPU ranking. This deployment has been exercised on an RTX 3060 12 GB with 32 GB system RAM.
-- A driver compatible with the pinned container. The validated combination used NVIDIA driver `595.99.02` and the container's PyTorch `2.11.0+cu130` / CUDA `13.0`; these are tested versions, not a claimed minimum driver requirement.
+- An NVIDIA driver compatible with the pinned CUDA 13.0 model-server container.
 - Disk space for the model snapshot (approximately 9.1 GB), container image, Python environment, embeddings, ranker, and caches. Outbound access is required for initial downloads and subsequent public-web retrieval.
 
-## 1. Prepare a separate backend checkout
+## 1. Install the included backend
 
-Run from this plugin repository's root:
+Clone this repository and enter its backend directory:
 
 ```sh
-export CITEWEAVE_PLUGIN_DIR="$(pwd)"
-cd ..
-git clone https://github.com/wavachao/citeweave.git citeweave-backend
-cd citeweave-backend
-git switch -c deploy/citeweave-vllm f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24
-git apply --check "$CITEWEAVE_PLUGIN_DIR/backend/vllm-openai.patch"
-git apply "$CITEWEAVE_PLUGIN_DIR/backend/vllm-openai.patch"
+git clone --branch v0.5.0 --depth 1 https://github.com/wavachao/dsh-citeweave.git
+cd dsh-citeweave
+git switch -c deploy/citeweave
+cd backend
 uv sync --frozen --python 3.12 --no-dev
 cp .env.example .env
 ```
 
-The adapter changes stay in this dedicated clone. The original CiteWeave checkout does not need to be modified.
+All subsequent commands run from `dsh-citeweave/backend`. Python dependencies,
+including Celery, Redis and PostgreSQL clients, are resolved in `uv.lock`.
+Source code, deployment templates and tests are included in this repository.
+Keep credentials, downloaded models and runtime data outside version control.
 
-The named deployment branch starts at the pinned revision. Review and commit
-the adapter there to keep deployment changes separate from upstream branches;
-credentials, model weights and runtime data remain outside Git.
+[GitHub Releases](https://github.com/wavachao/dsh-citeweave/releases) also provide
+Python wheel and source-distribution archives with SHA-256 checksums. The
+tagged checkout above includes the model download scripts, Compose files,
+service templates and lock file used by this deployment guide.
 
 ## 2. Download the model and ranking assets
 
-From the backend clone, use its locked Python environment:
+Use the locked Python environment:
 
 ```sh
-uv run python "$CITEWEAVE_PLUGIN_DIR/backend/download_model.py" \
+uv run python download_model.py \
   --output models/Qwen3.5-9B-AWQ-4bit
 ```
 
-The downloader uses the fixed revision and Hugging Face's resumable cache. It writes `source.json` only after the snapshot completes and rejects a directory marked with a different revision. It does not quantize or train a model.
+The downloader uses the fixed revision and Hugging Face's resumable cache. It writes `source.json` only after the snapshot completes and rejects a directory marked with a different revision.
 
 Download the backend's pinned embedding model and existing released ranker:
 
@@ -83,16 +87,16 @@ PY
 uv run python scripts/download_ranker.py
 ```
 
-The ranker downloader verifies the release checksums. Neither the original Qwen2.5 text weights nor the original Qwen2.5-VL vision weights are needed when both backend modes use the API.
+The ranker downloader verifies the release checksums.
 
 ## 3. Start the model server
 
-Still in the backend clone:
+From the backend directory:
 
 ```sh
 export CITEWEAVE_MODEL_DIR="$(pwd)/models/Qwen3.5-9B-AWQ-4bit"
-docker compose -f "$CITEWEAVE_PLUGIN_DIR/backend/compose.yml" up -d
-docker compose -f "$CITEWEAVE_PLUGIN_DIR/backend/compose.yml" logs --follow vllm
+docker compose -f compose.yml up -d
+docker compose -f compose.yml logs --follow vllm
 ```
 
 The container mounts the snapshot read-only, serves offline, and binds to `127.0.0.1:8000`. Its restart policy is `no`, so a reboot does not reserve the shared GPU. The supplied local configuration does not require a model-server API key. For automatic startup on demand and idle memory release, configure the [shared-GPU lifecycle](model-lifecycle.md) with the queued backend.
@@ -108,7 +112,7 @@ curl -f http://127.0.0.1:8000/v1/chat/completions \
 
 ## 4. Configure and start CiteWeave
 
-Set these values in the backend clone's `.env`:
+Set these values in `.env`:
 
 ```dotenv
 CITEWEAVE_BACKEND=api
@@ -140,7 +144,7 @@ uv run python -m citeweave serve --host 127.0.0.1 --port 8765
 
 Vision endpoint, model alias and key inherit the corresponding text settings when omitted. Explicit vision settings allow a separate compatible endpoint. vLLM requests disable thinking through `chat_template_kwargs`. The input budget reserves room within the model context for completion and template overhead.
 
-For a remote model service, configure its own authentication and HTTPS or a private tunnel, then set its API keys in the backend. Harness's final-answer provider is configured separately in Harness.
+For a remote model service, configure its authentication and HTTPS or a private tunnel, then set its API keys in the backend.
 
 ## 5. Verify retrieval and connect Harness
 
@@ -159,22 +163,14 @@ curl -f http://127.0.0.1:8765/api/evidence \
 
 Successful results contain source text and selected images. Visually described images use `caption_kind: "api_visual_description"`. Individual retrieval failures remain visible in `retrieval_errors`; usable sources and pictures can still be returned.
 
-In Harness, open **Plugins → Installed plugins → CiteWeave → Configure CiteWeave**. Set the backend address and workspace token. Start with a 300,000 ms timeout and three images. Ask an illustrated question and verify that a source-linked image loads. Leave Harness's DeepSeek answer-model configuration unchanged.
+In Harness, open **Plugins → Installed plugins → CiteWeave → Configure CiteWeave**. Set the backend address and workspace token. Use a 300,000 ms timeout and three images, then ask an illustrated question.
 
-The model server accepts one image per inference request. CiteWeave captions candidates sequentially, so one evidence result or Harness answer can still contain multiple images.
+## Hardware and performance
 
-## Validation scope
-
-Representative RTX 3060 12 GB results with the pinned snapshot, container and CPU ranking:
-
-| Request | Observed result |
-| --- | --- |
-| Chinese Eratosthenes question, fixed public source, forced refresh | 34.808 s; two visually described images; no retrieval errors |
-| Chinese HDD/SSD question, automatic source discovery | 19.486 s; four sources and one visually described comparison image; one source returned `403` while other evidence remained usable |
-| Peacock butterfly (*Aglais io*) question, fixed public source | 25.207 s; three visually described images; no retrieval errors |
-| Harness with its DeepSeek Flash answer model | Final answer displayed a retrieved image with no browser script errors |
-
-The model server reserved approximately 10.5 GiB GPU memory after startup. During the Eratosthenes request, 500 ms sampling observed a peak of 10,785 MiB. Cached-image authentication, repeated-request caching, and the existing `/api/search` endpoint were also checked. A long text prompt was truncated to the configured 6,144-token input budget and completed successfully. These are individual acceptance examples, not a throughput benchmark or a guarantee for every query, image size, or host.
+The deployment has been validated on an RTX 3060 12 GB with 32 GB system RAM.
+The pinned vLLM profile reserves approximately 10.5 GiB of GPU memory while
+running. The [benchmark report](../benchmarks/README.md) records measured DSH
+requests, configurations and outputs.
 
 ## Caching and operation
 
@@ -190,19 +186,24 @@ Use one CiteWeave worker for the GPU deployment. Request serialization remains i
 
 ## Regression checks
 
-From the patched backend clone:
+From this backend directory, run the complete CPU test suite:
 
 ```sh
-CITEWEAVE_BACKEND_SOURCE="$PWD" \
-  uv run python "$CITEWEAVE_PLUGIN_DIR/backend/test_vllm.py"
+uv sync --frozen --only-group ci
+PYTHONPATH=src CITEWEAVE_BACKEND_SOURCE="$PWD" \
+  uv run --no-sync pytest -q tests test_vllm.py test_queue.py test_model_runtime.py
+uv run --no-sync ruff check src scripts tests test_vllm.py test_queue.py test_model_runtime.py
 ```
+
+The CI dependency group installs no PyTorch or model weights. `--only-group ci`
+replaces the current environment with the test dependencies; use a separate
+checkout for testing, or restore the runtime afterward with
+`uv sync --frozen --no-dev`.
 
 The checks use mock HTTP and need no running model server, GPU or API credentials. They cover request parameters, source-address checks, resizing, credential separation, cache identities, CPU ranking and readiness. Repeat the real evidence and Harness checks after changing the model, container or serving limits.
 
 ## 中文说明
 
-此方案使用固定版本的 **Qwen3.5-9B 社区 AWQ 4-bit 权重**，通过 vLLM 为 CiteWeave 提供辅助查询与视觉描述；嵌入模型和已有 CrossEncoder 在 CPU 上运行，无需重新训练。Harness 的最终回答仍由原来配置的 DeepSeek 模型生成。
+后端使用 Qwen3.5-9B 和 vLLM 描述图片，并在 CPU 上完成嵌入和排序。完整源码、队列和显存生命周期管理均包含在本目录。
 
-按本文步骤，在插件仓库旁建立独立 CiteWeave 后端副本，检出指定提交并应用附带补丁；原 CiteWeave 工作目录无需修改。在后端锁定的 Python 环境中运行 `download_model.py`，下载固定模型快照并记录 `source.json`，再下载嵌入模型和现有排序器。随后使用 Compose 启动固定镜像、配置后端 `.env`，运行证据接口检查，并在 Harness 插件页面填写后端地址和工作区令牌。
-
-已验证 RTX 3060 12 GB、32 GB 系统内存，8,192-token 上下文、单并发、单次推理最多一张图片和 262,144 像素。后端会顺序描述多张候选图，一次检索仍可返回多张图片。代表性请求与显存观测见上表，不能视为所有问题的性能保证。模型服务、证据服务与 Harness 模型提供方各自使用独立配置；图形配置页不负责启动 GPU 后端。
+进入 `dsh-citeweave/backend`，运行 `uv sync --frozen --python 3.12 --no-dev`，按上文下载模型和排序资源、配置 `.env` 并启动服务。共享 GPU 部署请继续配置 [Celery 队列](queue.md)和[按需启停](model-lifecycle.md)。在 Harness 插件配置页填写后端地址和工作区令牌。实测数据见[性能报告](../benchmarks/README.md)。

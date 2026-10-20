@@ -58,7 +58,7 @@ images or silently substitute another model.
 
 Run the [model supervisor](systemd/dsh-citeweave-model-watch.service) alongside
 the API, worker and result-cleanup scheduler. Replace the template's backend path
-with the deployment clone's absolute path before installing it as a user service:
+with this repository's `backend/` absolute path before installing it as a user service:
 
 ```sh
 systemctl --user daemon-reload

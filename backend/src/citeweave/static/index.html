@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CiteWeave searches the web and brings explanations, useful images, and original sources into one answer.">
+  <meta name="theme-color" content="#18382f">
+  <title>CiteWeave — 搜索，让理解看得见</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/static/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar" aria-label="工作区导航">
+    <a class="brand" href="/" aria-label="CiteWeave 首页"><svg class="brand-mark" viewBox="0 0 30 30" aria-hidden="true"><path d="M11 5H5v20h6M19 5h6v20h-6M10 11l5 8 5-8"/></svg><span>Cite<span class="light">Weave</span></span></a>
+    <p class="brand-sub">让每一次理解，<br>都有看得见的出处。</p>
+    <button class="new-search" id="newSearch">新的搜索 <span aria-hidden="true">＋</span></button>
+    <div class="history-label">RECENT SEARCHES</div>
+    <nav class="history-list" id="history" aria-label="最近搜索"><p class="history-empty">你最近的搜索会保存在此浏览器中。</p></nav>
+    <div class="side-bottom"><span class="dot"></span><span id="connection">正在连接</span><button id="connectionButton" aria-label="管理工作区连接">连接</button></div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar"><span>SEARCH. SEE. UNDERSTAND.</span><a href="https://github.com/wavachao/citeweave" target="_blank" rel="noopener noreferrer">CiteWeave on GitHub ↗</a></header>
+    <section class="hero" id="hero">
+      <div class="welcome"><div class="eyebrow">KNOWLEDGE, WITH A CLEARER PICTURE</div><h1>好答案，不止于文字。</h1><p class="hero-description">把网页中的解释、图片与出处，编织成一个清晰的答案。<br>从一个问题开始，让理解更进一步。</p></div>
+      <form class="composer" id="searchForm">
+        <textarea id="query" aria-label="搜索问题" placeholder="你想了解什么？" required minlength="2" maxlength="3000" rows="2"></textarea>
+        <div class="composer-bottom">
+          <button class="text-button" id="sourceToggle" type="button" aria-expanded="false" aria-controls="sourceOptions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-2 2M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l2-2"/></svg>指定来源</button>
+          <label class="verify-label"><input type="checkbox" id="verify" checked>理解图片内容</label>
+          <span class="shortcut">⌘ / Ctrl + Enter</span>
+          <button class="submit" id="submit" type="submit">开始搜索 <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="source-options hidden" id="sourceOptions"><label for="urls">优先阅读这些公开网页</label><textarea id="urls" placeholder="https://example.com/article&#10;每行一个链接，最多 5 个" rows="2"></textarea><p>留空时自动联网搜索。只支持无需登录的公开网页。</p></div>
+      </form>
+      <div class="suggestions" id="suggestions">
+        <button class="suggestion" data-query="古希腊人是怎样用影子测出地球周长的？">用影子测量地球，有多巧妙？<span>SCIENCE ↗</span></button>
+        <button class="suggestion" data-query="电影里拍摄镜子时，为什么看不到摄像机？">镜头里的镜子，为何没有摄像机？<span>EVERYDAY ↗</span></button>
+        <button class="suggestion" data-query="机械硬盘和固态硬盘的内部结构有什么区别？">HDD 与 SSD，内部有什么不同？<span>TECHNOLOGY ↗</span></button>
+      </div>
+      <p class="disclaimer">图片来自实际网页，点击即可查看出处。AI 回答可能有误，请结合原始来源判断。</p>
+    </section>
+    <div class="loading hidden" id="loading" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><div><strong>正在寻找资料，编织答案</strong><small>检索网页、理解图片与整理解释需要一些时间。<span id="elapsed"></span></small></div></div>
+    <div class="error hidden" id="error" role="alert"></div>
+    <section class="result hidden" id="result" aria-label="搜索结果">
+      <article class="answer"><div class="result-toolbar"><span class="live-badge"><span class="dot"></span><span id="resultKind">联网回答</span></span><span id="answerMeta"></span><div class="result-tools"><button id="copyAnswer" aria-label="复制回答"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></svg><span>复制</span></button><button id="exportAnswer" aria-label="导出 Markdown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4l4 4 4-4M4 16v5h16v-5"/></svg><span>导出</span></button><button id="refreshAnswer" aria-label="重新检索"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0112-1l2 3M4 15l2 3a7 7 0 0012-1"/></svg></button></div></div><div id="answerBody"></div><p class="answer-footer">文字解释与图片均可追溯到原始网页。图片用于辅助理解，不单独构成对事实、数值或因果关系的证明。</p></article>
+      <aside class="sources-panel" id="sources" aria-label="参考来源"></aside>
+    </section>
+  </main>
+  <dialog class="dialog" id="accessDialog" aria-labelledby="accessTitle"><h2 id="accessTitle">连接你的工作区</h2><p>此工作区已启用访问保护。输入管理员提供的访问令牌后，即可开始搜索。</p><form id="accessForm"><input type="password" id="accessToken" aria-label="工作区访问令牌" autocomplete="off" required maxlength="256" placeholder="工作区访问令牌"><button class="submit" type="submit">连接工作区 ↗</button></form><small id="accessError">这是工作区访问令牌，不是模型服务商的 API 密钥。</small></dialog>
+  <dialog class="lightbox" id="lightbox" aria-label="放大查看图片"><button class="close-zoom" id="closeZoom" aria-label="关闭图片">×</button><img id="zoomImage" alt=""></dialog>
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

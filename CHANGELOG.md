@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.0) — 2026-10-21
+
+- Complete Python backend source, dependency lock, deployment configuration, and tests maintained alongside the Harness plugin.
+- Direct backend installation from the repository, with CI covering plugin packaging and backend behavior.
+- Harness comparison with shared prompts, full answers, and timing after model warm-up.
+- Updated English and Chinese documentation and a smaller plugin installation archive.
+
 ## [0.4.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0) — 2026-10-20
 
 - On-demand vLLM startup and GPU-memory release after an idle period, supervised independently of retrieval workers.

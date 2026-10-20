@@ -1,0 +1,40 @@
+services:
+  citeweave:
+    build: .
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:8765:8765"
+    environment:
+      CITEWEAVE_ACCESS_TOKEN: ${CITEWEAVE_ACCESS_TOKEN:?Set a random workspace token in .env}
+      CITEWEAVE_BACKEND: ${CITEWEAVE_BACKEND:-local}
+      CITEWEAVE_CACHE_TTL: ${CITEWEAVE_CACHE_TTL:-900}
+      CITEWEAVE_RATE_LIMIT: ${CITEWEAVE_RATE_LIMIT:-10}
+      CITEWEAVE_DOH: ${CITEWEAVE_DOH:-0}
+      CITEWEAVE_MAX_INPUT_TOKENS: ${CITEWEAVE_MAX_INPUT_TOKENS:-24576}
+      CITEWEAVE_MAX_NEW_TOKENS: ${CITEWEAVE_MAX_NEW_TOKENS:-1600}
+      CITEWEAVE_MAX_IMAGES: ${CITEWEAVE_MAX_IMAGES:-10}
+      SEARXNG_URL: ${SEARXNG_URL:-}
+      CITEWEAVE_API_BASE: ${CITEWEAVE_API_BASE:-https://api.deepseek.com}
+      CITEWEAVE_API_MODEL: ${CITEWEAVE_API_MODEL:-deepseek-flash}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+    volumes:
+      - ./models:/app/models:ro
+      - citeweave-data:/app/data
+      - ./runs:/app/runs:ro
+      - citeweave-work:/app/work
+    shm_size: 1gb
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+volumes:
+  citeweave-data:
+  citeweave-work:

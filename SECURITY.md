@@ -13,6 +13,6 @@ Security fixes target the latest release. This release supports DeepSeek Harness
 - Selected image bytes are copied into Harness's attachment store. Queries, source text, captions, and image references may be retained in Harness conversation history and session exports. Backend caching and retention are controlled by the separate CiteWeave deployment.
 - Retrieved pages, captions, and images are untrusted source material. The plugin marks evidence as external data and restricts image-cache downloads to the configured backend origin. The configured backend itself is a trusted service.
 
-Use HTTPS or an SSH tunnel for a remote backend. Supply tokens through the host environment or secret configuration, keep them out of version control, and redact them from issue reports. Deploy the backend according to its [pinned security and network guidance](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/DEPLOYMENT.md).
+Use HTTPS or an SSH tunnel for a remote backend. Supply tokens through the host environment or secret configuration, keep them out of version control, and redact them from issue reports. See the [backend deployment guide](backend/README.md) for network and service configuration.
 
 Backend vulnerabilities should be reported to [CiteWeave](https://github.com/wavachao/citeweave/security); Harness vulnerabilities should be reported to [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness/security).

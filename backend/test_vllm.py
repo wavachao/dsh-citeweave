@@ -1,4 +1,4 @@
-"""Keyless checks for the vLLM patch, against an already patched backend checkout.
+"""Keyless checks for the included vLLM backend.
 
 Run with CITEWEAVE_BACKEND_SOURCE=/path/to/citeweave python backend/test_vllm.py.
 No GPU, model downloads, running server, or real credentials are used.
@@ -307,8 +307,9 @@ class VllmTests(unittest.TestCase):
         self.assertEqual(retrieve.call_args_list[-1].args, (request.query,))
 
     def test_empty_evidence_is_not_a_service_failure_and_is_not_cached(self):
-        from citeweave import app
         from contextlib import nullcontext
+
+        from citeweave import app
 
         cache = Mock()
         cache.get.return_value = None
@@ -327,11 +328,12 @@ class VllmTests(unittest.TestCase):
             cache.put.assert_not_called()
 
     def test_concurrent_evidence_calls_wait_instead_of_immediate_conflict(self):
-        from citeweave import app
-        from concurrent.futures import ThreadPoolExecutor
-        from contextlib import nullcontext
         import threading
         import time
+        from concurrent.futures import ThreadPoolExecutor
+        from contextlib import nullcontext
+
+        from citeweave import app
 
         entered = threading.Event()
         active, peak = 0, 0
