@@ -1,6 +1,6 @@
 {
   "name": "dsh-citeweave",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Web evidence and sourced images for DeepSeek Harness answers",
   "type": "module",
   "main": "index.js",

@@ -45,6 +45,7 @@ class VllmTests(unittest.TestCase):
                 "CITEWEAVE_VISION_API_MODEL": "served-vlm",
                 "CITEWEAVE_VISION_API_KEY": "vision-secret",
                 "CITEWEAVE_RANKER_DEVICE": "cpu",
+                "CITEWEAVE_QUEUE": "",
             },
         ).start()
         self.requests = []
@@ -268,6 +269,95 @@ class VllmTests(unittest.TestCase):
         self.assertEqual(
             devices, [("embedding", "cpu"), ("crossencoder", "cpu"), ("tokens", "cpu")]
         )
+
+    def test_search_no_results_is_empty_but_provider_failures_still_raise(self):
+        failure = type("DDGSException", (Exception,), {})
+        search = Mock(side_effect=failure("No results found."))
+        with patch.dict(sys.modules, {
+            "ddgs": SimpleNamespace(DDGS=Mock(return_value=SimpleNamespace(text=search))),
+            "ddgs.exceptions": SimpleNamespace(DDGSException=failure),
+        }), patch.dict(os.environ, {"SEARXNG_URL": ""}):
+            self.assertEqual(web.search("rare topic"), [])
+            search.side_effect = failure("Search provider timed out")
+            with self.assertRaises(failure):
+                web.search("rare topic")
+
+    def test_unreadable_sources_preserve_retrieval_diagnostics(self):
+        with patch.object(web, "fetch", side_effect=ValueError("HTTP 403")):
+            with self.assertRaises(web.NoEvidenceError) as caught:
+                web.retrieve("topic", ["https://example.org/page"])
+        self.assertEqual(caught.exception.errors, [
+            {"url": "https://example.org/page", "error": "HTTP 403"}
+        ])
+
+    def test_translated_discovery_can_fall_back_to_original_language(self):
+        from citeweave import app
+
+        engine = Mock()
+        engine.generator.complete.return_value = {"response": "ink wash painting realism"}
+        request = SimpleNamespace(query="水墨画和写实画", urls=[], verify_images=False)
+        with patch.object(app, "engine", engine), patch.object(app, "retrieve", side_effect=[
+            web.NoEvidenceError([]), ([{"id": "s0"}], [], [])
+        ]) as retrieve:
+            query, sources, _, notes = app.retrieve_evidence(request)
+        self.assertEqual(query, request.query)
+        self.assertEqual(sources, [{"id": "s0"}])
+        self.assertTrue(notes)
+        self.assertEqual(retrieve.call_args_list[-1].args, (request.query,))
+
+    def test_empty_evidence_is_not_a_service_failure_and_is_not_cached(self):
+        from citeweave import app
+        from contextlib import nullcontext
+
+        cache = Mock()
+        cache.get.return_value = None
+        with patch.object(config, "ACCESS_TOKEN", ""), \
+             patch.object(app, "engine", Mock()), \
+             patch.object(app, "answer_cache", cache), \
+             patch.object(app, "gpu_session", return_value=nullcontext()), \
+             patch.object(app.limiter, "allow", return_value=True), \
+             patch.object(app, "retrieve_evidence", side_effect=web.NoEvidenceError([])), \
+             TestClient(app.app) as client:
+            response = client.post("/api/evidence", json={"query": "rare topic"})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()["sources"], [])
+            self.assertEqual(response.json()["images"], [])
+            self.assertTrue(response.json()["retrieval_errors"])
+            cache.put.assert_not_called()
+
+    def test_concurrent_evidence_calls_wait_instead_of_immediate_conflict(self):
+        from citeweave import app
+        from concurrent.futures import ThreadPoolExecutor
+        from contextlib import nullcontext
+        import threading
+        import time
+
+        entered = threading.Event()
+        active, peak = 0, 0
+
+        def retrieve(_request):
+            nonlocal active, peak
+            active += 1
+            peak = max(peak, active)
+            entered.set()
+            time.sleep(0.1)
+            active -= 1
+            raise web.NoEvidenceError([])
+
+        cache = Mock()
+        cache.get.return_value = None
+        with patch.object(config, "ACCESS_TOKEN", ""), \
+             patch.object(app, "engine", Mock()), \
+             patch.object(app, "answer_cache", cache), \
+             patch.object(app, "gpu_session", side_effect=lambda **_: nullcontext()), \
+             patch.object(app.limiter, "allow", return_value=True), \
+             patch.object(app, "retrieve_evidence", side_effect=retrieve), \
+             TestClient(app.app) as client, ThreadPoolExecutor(2) as pool:
+            first = pool.submit(client.post, "/api/evidence", json={"query": "first topic"})
+            self.assertTrue(entered.wait(2))
+            second = pool.submit(client.post, "/api/evidence", json={"query": "second topic"})
+            self.assertEqual([first.result().status_code, second.result().status_code], [200, 200])
+        self.assertEqual(peak, 1)
 
 
 if __name__ == "__main__":

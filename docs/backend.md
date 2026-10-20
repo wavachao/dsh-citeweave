@@ -27,6 +27,8 @@ The model's stored quantization is `compressed-tensors` symmetric INT4 with grou
 
 The guide records representative evidence and Harness results, plus the tested driver/container combination. Individual request timings and memory observations are not a general benchmark.
 
+For shared or continuous service, add the [Celery, Redis and PostgreSQL queue](../backend/queue.md). It preserves the evidence API contract and stores task results for later lookup.
+
 ## Original local pipeline
 
 For the original unpatched backend, use Linux, Python 3.12, [uv](https://docs.astral.sh/uv/), a CUDA-capable NVIDIA GPU, a driver compatible with the locked CUDA 12.8 PyTorch wheels, and approximately 50 GB free disk for the default model set:
@@ -80,7 +82,7 @@ curl -f http://127.0.0.1:8765/api/evidence \
   -d '{"query":"How did Eratosthenes measure Earth?","urls":["https://en.wikipedia.org/wiki/Eratosthenes"],"verify_images":true,"max_images":3}'
 ```
 
-For an unprotected loopback deployment, omit the Authorization header. A successful response has `mode: "evidence"`, `sources`, `images`, and `retrieval_errors`. An empty image list is valid when no suitable picture is found; a failed source does not necessarily invalidate the remaining evidence. `404` usually indicates an incorrect backend revision or proxy route; `409` means the GPU worker is busy.
+For an unprotected loopback deployment, omit the Authorization header. A successful response has `mode: "evidence"`, `sources`, `images`, and `retrieval_errors`. An empty image list is valid when no suitable picture is found; a failed source does not necessarily invalidate the remaining evidence. `404` usually indicates an incorrect backend revision or proxy route. The queue profile accepts concurrent submissions and returns `429` when full; legacy deployments can return `409` when a worker is busy.
 
 The endpoint retrieves evidence without writing the final answer. It may use text assistance to translate a search query and vision inference to describe images. See the pinned [API reference](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/API.md#post-apievidence).
 

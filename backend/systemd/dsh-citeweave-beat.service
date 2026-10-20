@@ -1,0 +1,15 @@
+[Unit]
+Description=CiteWeave task-result retention scheduler
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/citeweave-backend
+EnvironmentFile=/srv/citeweave-backend/.env
+ExecStart=/srv/citeweave-backend/.venv/bin/celery -A citeweave.jobs:celery_app beat --schedule=work/celerybeat-schedule --pidfile=work/celerybeat.pid --loglevel=INFO
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

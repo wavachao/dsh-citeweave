@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0) — 2026-10-20
+
+- Durable Celery retrieval jobs with a Redis broker and PostgreSQL task results, compatible with the existing synchronous evidence API.
+- Bounded queue admission, single-worker processing, task lookup and queued cancellation, persistent service volumes, and result retention cleanup.
+- Pinned infrastructure images and hash-locked queue dependencies.
+- Empty search results and unreadable sources return evidence diagnostics instead of a generic service error; translated discovery can fall back to the original language.
+- Harness declares retrieval calls non-concurrent and shows backend error details, request IDs and queue-admission guidance without automatically resubmitting failed requests.
+
 ## [0.2.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0) — 2026-10-20
 
 - Optional Qwen3.5-9B community AWQ 4-bit backend for text assistance and visual descriptions on RTX 3060 12 GB.

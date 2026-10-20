@@ -1,0 +1,16 @@
+[Unit]
+Description=CiteWeave queued evidence API
+After=network-online.target dsh-citeweave-worker.service
+Wants=dsh-citeweave-worker.service dsh-citeweave-beat.service
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/citeweave-backend
+EnvironmentFile=/srv/citeweave-backend/.env
+ExecStart=/srv/citeweave-backend/.venv/bin/python -m citeweave serve --host 127.0.0.1 --port 8765
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

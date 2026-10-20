@@ -13,7 +13,7 @@ test('distributable contains the complete plugin and only public runtime resourc
   const files = archive.files.map(file => file.path)
   assert.equal(archive.name, 'dsh-citeweave')
   assert.equal(archive.version, manifest.version)
-  for (const path of ['backend/README.md', 'backend/compose.yml', 'backend/download_model.py', 'backend/vllm-openai.patch', 'backend/test_vllm.py']) {
+  for (const path of ['backend/README.md', 'backend/compose.yml', 'backend/download_model.py', 'backend/vllm-openai.patch', 'backend/test_vllm.py', 'backend/queue.md', 'backend/queue-compose.yml', 'backend/requirements-queue.txt', 'backend/test_queue.py']) {
     assert.ok(files.includes(path), `${path} must ship in the installation archive`)
   }
   for (const path of ['package.json', 'index.js', 'client.js', 'cordis.patch.yml', 'README.md', 'README.zh-CN.md', 'CHANGELOG.md', 'LICENSE', 'icon.svg', 'locale/en.json', 'locale/zh.json', 'docs/backend.md', 'docs/reference.md', 'docs/images/geography.png', 'docs/images/biology.png', 'docs/images/engineering.png', 'docs/images/README.md', 'docs/images/GFDL-1.2.txt']) {

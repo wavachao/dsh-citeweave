@@ -174,6 +174,10 @@ The model server reserved approximately 10.5 GiB GPU memory after startup. Durin
 
 ## Caching and operation
 
+For sustained or shared use, deploy the [Celery, Redis and PostgreSQL queue](queue.md).
+It provides durable pending work and stored task results while preserving the
+synchronous evidence endpoint used by existing Harness installations.
+
 Source images pass through public-address validation and the JPEG resize cache before being sent as data URIs. The model server receives image bytes rather than fetching remote URLs.
 
 Caption cache identities include endpoint, model alias, API type, prompt and image bytes. Use a new alias when changing weights. Answer-cache identities include API settings without credentials. Preserve model weights, the CPU ranker, configuration and cache volumes according to the [backend deployment guide](../docs/backend.md).

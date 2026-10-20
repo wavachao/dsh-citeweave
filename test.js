@@ -83,6 +83,7 @@ test('native tool registry: authenticated evidence, durable images, partial fail
   assert.match(projected[0].content[0].text, /!\[A/)
   assert.equal(result.content[1].type, 'image')
   const definition = ctx.tools.get('citeweave_search')
+  assert.equal(definition.isConcurrencySafe({ query: 'diagram' }), false)
   assert.equal(definition.output.schema.properties.sources.items.properties.url.type, 'string')
   assert.equal(definition.output.schema.properties.images.items.properties.attachment.properties.attachmentId.type, 'string')
   assert.match(renderToolsSdk([{ name: definition.name, parameters: definition.parameters, output: definition.output.schema }]), /attachmentId: string/)

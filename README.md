@@ -12,6 +12,8 @@ CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.
 
 The optional [12 GB GPU deployment](backend/README.md) uses a pinned Qwen3.5-9B community AWQ 4-bit model for local query assistance and image descriptions, with CPU ranking. Harness continues using its configured DeepSeek answer model. No new training is required.
 
+For shared or continuous use, the [durable queue profile](backend/queue.md) adds Celery, a persistent Redis broker and PostgreSQL task results. A single worker processes retrieval jobs; existing plugin requests retain their response contract.
+
 - Search the web or retrieve up to five specified source pages.
 - Select images using visual descriptions and relevance ranking.
 - Store selected images in Harness's native attachment store and display them through its Markdown renderer.
@@ -61,12 +63,12 @@ For local text and vision assistance on an RTX 3060 12 GB, use the [Qwen3.5 vLLM
 Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
 
 ```text
-github:wavachao/dsh-citeweave#v0.2.0
+github:wavachao/dsh-citeweave#v0.3.0
 ```
 
 Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
 
-For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0). An npm publication is not required.
+For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0). An npm publication is not required.
 
 ### 3. Connect Harness
 
@@ -98,7 +100,7 @@ The tool accepts a search query, optional source URLs, image verification, and c
 | --- | --- | --- |
 | `endpoint` | `CITEWEAVE_ENDPOINT` or `http://127.0.0.1:8765` | Backend service origin. |
 | `accessToken` | `CITEWEAVE_ACCESS_TOKEN` or empty | Backend workspace token, sent as a Bearer credential. |
-| `timeoutMs` | `180000` | Total tool timeout in milliseconds. |
+| `timeoutMs` | `300000` | Total tool timeout in milliseconds. |
 | `maxImages` | `3` | Maximum images per search; range 1–8. |
 
 Non-empty plugin settings take precedence over environment variables. [Environment variables and configuration patches](docs/reference.md#advanced-configuration) remain available for managed deployments.

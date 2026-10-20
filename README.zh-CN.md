@@ -12,6 +12,8 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 
 可选的 [12 GB 显卡部署方案](backend/README.md)使用固定版本的 Qwen3.5-9B 社区 AWQ 4-bit 模型，在本地完成辅助查询和视觉描述，排序在 CPU 上执行。Harness 的最终回答仍由原来配置的 DeepSeek 模型生成，无需重新训练。
 
+持续使用或多个客户端共享后端时，使用[持久任务队列方案](backend/queue.md)：Celery 单工作进程处理检索任务，Redis 持久化待处理任务，PostgreSQL 保存任务状态和结果，现有插件接口保持兼容。
+
 - 自动联网搜索，或读取最多五个指定网页。
 - 根据图片视觉描述与相关性排序选择配图。
 - 将图片存入 Harness 原生附件存储，通过现有 Markdown 渲染器显示。
@@ -61,12 +63,12 @@ Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。
 在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入软件包定位符：
 
 ```text
-github:wavachao/dsh-citeweave#v0.2.0
+github:wavachao/dsh-citeweave#v0.3.0
 ```
 
 安装到当前使用的配置档。Harness Desktop 与 Web 共用插件管理客户端和配置界面。软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
 
-命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0)，安装不依赖 npm 发布。
+命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0)，安装不依赖 npm 发布。
 
 ### 3. 配置连接
 
@@ -98,7 +100,7 @@ github:wavachao/dsh-citeweave#v0.2.0
 | --- | --- | --- |
 | `endpoint` | `CITEWEAVE_ENDPOINT` 或 `http://127.0.0.1:8765` | 后端服务地址。 |
 | `accessToken` | `CITEWEAVE_ACCESS_TOKEN` 或空值 | 后端工作区令牌，通过 Bearer 请求头发送。 |
-| `timeoutMs` | `180000` | 整次工具调用的超时，单位为毫秒。 |
+| `timeoutMs` | `300000` | 整次工具调用的超时，单位为毫秒。 |
 | `maxImages` | `3` | 单次检索最多返回图片数，范围为 1–8。 |
 
 非空插件配置优先于环境变量。托管部署仍可使用[环境变量和配置补丁](docs/reference.md#advanced-configuration)。

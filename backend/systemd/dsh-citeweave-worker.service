@@ -1,0 +1,16 @@
+[Unit]
+Description=CiteWeave Celery retrieval worker
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/citeweave-backend
+EnvironmentFile=/srv/citeweave-backend/.env
+Environment=CITEWEAVE_WORKER=1
+ExecStart=/srv/citeweave-backend/.venv/bin/celery -A citeweave.jobs:celery_app worker --pool=solo --concurrency=1 --prefetch-multiplier=1 --queues=citeweave --hostname=citeweave@%%h --statedb=work/celery-worker.state --loglevel=INFO
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=1800
+
+[Install]
+WantedBy=default.target

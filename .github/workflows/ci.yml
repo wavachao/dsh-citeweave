@@ -35,6 +35,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           repository: wavachao/citeweave
@@ -44,7 +47,13 @@ jobs:
         run: git -C work/backend-source apply "$GITHUB_WORKSPACE/backend/vllm-openai.patch"
       - name: Install test dependencies
         run: python3 -m pip install 'numpy>=1.26,<3' 'pillow>=11' 'fastapi>=0.115' 'httpx>=0.28' 'beautifulsoup4>=4.13' 'python-dotenv>=1'
+      - name: Install locked queue dependencies
+        run: python3 -m pip install --require-hashes -r backend/requirements-queue.txt
       - name: Test adapter without GPU or model downloads
         run: python3 backend/test_vllm.py
+        env:
+          CITEWEAVE_BACKEND_SOURCE: ${{ github.workspace }}/work/backend-source
+      - name: Test durable queue contracts
+        run: python3 backend/test_queue.py
         env:
           CITEWEAVE_BACKEND_SOURCE: ${{ github.workspace }}/work/backend-source

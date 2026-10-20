@@ -16,7 +16,7 @@ Backend model selection is independent of the Harness answer model. The optional
 | --- | --- | --- | --- |
 | `endpoint` | string | `CITEWEAVE_ENDPOINT` or `http://127.0.0.1:8765` | HTTP(S) backend origin. API and image routes are resolved from its root. |
 | `accessToken` | secret string | `CITEWEAVE_ACCESS_TOKEN` or empty | Backend Bearer token. |
-| `timeoutMs` | positive integer | `180000` | Timeout for evidence retrieval and image import together. |
+| `timeoutMs` | positive integer | `300000` | Timeout for evidence retrieval and image import together. |
 | `maxImages` | integer, 1–8 | `3` | Limit sent to the backend and applied to imported images. |
 
 A non-empty configured `endpoint` or `accessToken` overrides the corresponding environment variable. Clearing the stored token removes that configured value; an existing `CITEWEAVE_ACCESS_TOKEN` remains a fallback.
@@ -26,18 +26,18 @@ A non-empty configured `endpoint` or `accessToken` overrides the corresponding e
 For command-line installation, use an initialized Harness Web profile. If this is a new setup, run `dsh web` once and configure the answer model first. The examples use `web`; substitute your actual profile name if different.
 
 ```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.2.0
+dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.3.0
 ```
 
 Alternatively, download and install the release archive:
 
 ```sh
-curl -fL -o dsh-citeweave-0.2.0.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.2.0/dsh-citeweave-0.2.0.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.2.0.tgz
+curl -fL -o dsh-citeweave-0.3.0.tgz \
+  https://github.com/wavachao/dsh-citeweave/releases/download/v0.3.0/dsh-citeweave-0.3.0.tgz
+dsh plugin --profile web add ./dsh-citeweave-0.3.0.tgz
 ```
 
-The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0) includes the archive and `SHA256SUMS`.
+The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0) includes the archive and `SHA256SUMS`.
 
 ## Advanced configuration
 
@@ -63,7 +63,7 @@ To configure a profile with an overlay, create `citeweave.config.yml`:
 - id: citeweave
   config:
     endpoint: http://127.0.0.1:8765
-    timeoutMs: 180000
+    timeoutMs: 300000
     maxImages: 3
 ```
 
@@ -124,8 +124,10 @@ Images persist in Harness's attachment store, independently of the backend's ima
 | Connection changes are not reflected | Save the `citeweave` configuration page and start a new tool call. Check for a later configuration patch overriding the same row. |
 | `401` | Ensure the plugin's token matches the backend's `CITEWEAVE_ACCESS_TOKEN`. Restart the host after changing its environment. |
 | `404` at `/api/evidence` | Deploy the pinned backend revision and verify root API routing. |
-| `409` | The backend is handling another GPU request. Retry after it completes. |
-| `429` | Backend request admission limit; honor `Retry-After`. |
+| `409` | A legacy worker is busy, or a job-state operation conflicts with an already running task. |
+| `429` | Queue capacity or request admission limit; honor `Retry-After`. No task is accepted when the queue is full. |
+| `503` | A serving dependency or task failed; use the request/task ID to inspect the backend. Empty retrieval results are returned as evidence diagnostics by the adapter. |
+| `504` | A submitted task has not completed within the HTTP wait budget. Query `/api/jobs/{task_id}` before submitting another task. |
 | Timeout | Check backend logs, model loading, outbound retrieval, and `timeoutMs`. |
 | No images returned | Inspect `retrieval_errors`; try a clear visual question or a public source page with suitable illustrations. |
 | Images are returned but not displayed | Check the active filesystem's attachment path mapping and inspect the final Markdown destination. |

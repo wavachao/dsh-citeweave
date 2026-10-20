@@ -7,7 +7,7 @@ export const inject = ['tools', 'systemPrompt', 'attachments', 'fs']
 export const Config = Schema.object({
   endpoint: Schema.string().pattern(/^(?:https?:\/\/[^\s]+)?$/).default('').volatile(),
   accessToken: Schema.string().role('secret').default('').volatile(),
-  timeoutMs: Schema.natural().min(1).max(2147483647).default(180000).volatile(),
+  timeoutMs: Schema.natural().min(1).max(2147483647).default(300000).volatile(),
   maxImages: Schema.natural().min(1).max(8).default(3).volatile(),
 })
 
@@ -125,7 +125,7 @@ export function apply(ctx, config) {
       ],
     },
     timeoutMs: config.timeoutMs.get(),
-    isConcurrencySafe: () => true,
+    isConcurrencySafe: () => false,
     async execute(args, exec) {
       // Snapshot live settings once so an in-flight retrieval keeps one backend
       // and credential even when another window saves new configuration.
@@ -134,10 +134,22 @@ export function apply(ctx, config) {
       const timeoutMs = config.timeoutMs.get()
       const maxImages = config.maxImages.get()
       const headers = token ? { Authorization: `Bearer ${token}` } : {}
+      const brief = (value, limit) => (token ? value.replaceAll(token, '[redacted]') : value).replace(/\s+/g, ' ').slice(0, limit)
       async function request(path, signal, options = {}) {
         const response = await fetch(new URL(path, endpoint), { ...options, headers: { ...headers, ...options.headers }, signal, redirect: 'error' })
-        if (!response.ok) throw new Error(`CiteWeave ${path}: HTTP ${response.status}${response.status === 401 ? ' (check accessToken / CITEWEAVE_ACCESS_TOKEN)' : ''}`)
-        return response
+        if (response.ok) return response
+        let detail = ''
+        try {
+          const body = await response.json()
+          if (typeof body.detail === 'string') detail = `: ${brief(body.detail, 240)}`
+        } catch {
+          await response.body?.cancel().catch(() => {})
+          signal.throwIfAborted()
+        }
+        const requestId = response.headers.get('x-request-id')
+        const taskId = response.headers.get('x-task-id')
+        const retryAfter = response.status === 429 && response.headers.get('retry-after')
+        throw new Error(`CiteWeave ${brief(path, 160)}: HTTP ${response.status}${response.status === 401 ? ' (check accessToken / CITEWEAVE_ACCESS_TOKEN)' : ''}${detail}${requestId ? ` (request ID: ${brief(requestId, 80)})` : ''}${taskId ? ` (task ID: ${brief(taskId, 80)}; query /api/jobs/${encodeURIComponent(brief(taskId, 80))})` : ''}${retryAfter ? ` (Retry-After: ${brief(retryAfter, 80)})` : ''}`)
       }
       if (!args.query.trim()) throw new Error('query must not be blank')
       if (args.urls && (args.urls.length > 5 || args.urls.length === 0)) throw new Error('urls must contain 1–5 source URLs')
