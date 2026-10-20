@@ -17,6 +17,24 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 - 在 Harness Desktop 与 Web 共用的插件界面中配置后端。
 - GPU 后端独立部署，无需修改 Harness 源码。
 
+## 图文回答示例
+
+地质、生物与工程领域的回答示例，图片与解释相邻展示，并保留来源页面引用。
+
+**大峡谷地层**：结合检索到的美国国家公园管理局地质图，解释岩层结构。
+
+![Harness 回答展示大峡谷地层解释、地质图与来源引用](docs/images/geography.png)
+
+**帝王蝶识别**：结合检索到的蝴蝶照片，说明翅膀纹路与识别特征。
+
+![Harness 回答展示帝王蝶翅膀纹路说明、照片与来源引用](docs/images/biology.png)
+
+**桥梁工程**：结合金门大桥来源照片，解释悬索桥的荷载传递路径。
+
+![Harness 回答展示悬索桥受力解释、金门大桥照片与来源引用](docs/images/engineering.png)
+
+截图为 Harness Web 的实际回答。嵌入图片保留原始许可证，作者与许可信息见[图片署名](docs/images/README.md)。
+
 ## 运行要求
 
 | 组件 | 支持版本或要求 |
@@ -24,7 +42,7 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 | DeepSeek Harness | `0.2.1-rc.2` |
 | 插件运行环境 | Node.js 24 或更新版本；Harness 附件与文件系统服务 |
 | CiteWeave 后端 | 提供证据接口的[固定版本](docs/backend.md)，可由 Harness 主机访问 |
-| 后端硬件 | Linux、Python 3.12、支持 CUDA 的 NVIDIA GPU；完整流程已在 24 GB RTX 4090 D 上运行 |
+| 后端硬件 | Linux、Python 3.12、支持 CUDA 的 NVIDIA GPU；已验证 RTX 3060 12 GB（API 文本模式）和 RTX 4090 D 24 GB |
 
 Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。安装插件不会同时安装 Python 后端或模型权重。
 
@@ -39,12 +57,12 @@ Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。
 在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入软件包定位符：
 
 ```text
-github:wavachao/dsh-citeweave#v0.1.1
+github:wavachao/dsh-citeweave#v0.1.2
 ```
 
 安装到当前使用的配置档。Harness Desktop 与 Web 共用插件管理客户端和配置界面。软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
 
-命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1)，安装不依赖 npm 发布。
+命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2)，安装不依赖 npm 发布。
 
 ### 3. 配置连接
 

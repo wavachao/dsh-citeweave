@@ -1,6 +1,6 @@
 {
   "name": "dsh-citeweave",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Web evidence and sourced images for DeepSeek Harness answers",
   "type": "module",
   "main": "index.js",
@@ -17,6 +17,7 @@
     "client.js",
     "cordis.patch.yml",
     "locale/",
+    "docs/",
     "icon.svg",
     "README.md",
     "README.zh-CN.md",

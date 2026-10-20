@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2) — 2026-10-20
+
+- Illustrated examples covering geology, wildlife identification, and bridge engineering.
+- Source-image attribution and licenses distributed with the documentation.
+- Backend deployment guide for RTX 3060 12 GB using API text generation and local vision models.
+- Documentation and example images included in the installation archive.
+
 ## [0.1.1](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1) — 2026-10-20
 
 - Plugin configuration page for the shared Harness Desktop/Web client.

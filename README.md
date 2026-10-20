@@ -17,6 +17,24 @@ CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.
 - Configure the backend in the shared Harness Desktop/Web plugin interface.
 - Keep the GPU backend separate from the plugin; no Harness source changes are required.
 
+## Illustrated answers
+
+Geology, biology, and engineering examples with inline illustrations and source-page citations.
+
+**Grand Canyon geology** — rock layers explained alongside a retrieved National Park Service diagram.
+
+![Harness answer explaining Grand Canyon rock layers with a geological diagram and source citation](docs/images/geography.png)
+
+**Monarch identification** — wing markings explained with a retrieved butterfly photograph.
+
+![Harness answer identifying monarch butterfly wing markings with a photograph and source citation](docs/images/biology.png)
+
+**Bridge engineering** — the Golden Gate Bridge's load path illustrated with a source photograph.
+
+![Harness answer explaining a suspension bridge's load path with a Golden Gate Bridge photograph and source citation](docs/images/engineering.png)
+
+Screenshots show Harness Web answers. Embedded images retain their original licenses; see [image credits](docs/images/README.md).
+
 ## Requirements
 
 | Component | Supported version / requirement |
@@ -24,7 +42,7 @@ CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.
 | DeepSeek Harness | `0.2.1-rc.2` |
 | Plugin host | Node.js 24 or later; Harness attachments and filesystem services |
 | CiteWeave backend | The [pinned evidence API revision](docs/backend.md), reachable from the Harness host |
-| Backend hardware | Linux, Python 3.12, and a CUDA-capable NVIDIA GPU; the complete pipeline has been exercised on a 24 GB RTX 4090 D |
+| Backend hardware | Linux, Python 3.12, and a CUDA-capable NVIDIA GPU; validated on RTX 3060 12 GB with API text generation and RTX 4090 D 24 GB |
 
 Harness is under active development. This release declares compatibility with the exact version above. Installing the plugin does not install the Python backend or its model weights.
 
@@ -39,12 +57,12 @@ Follow [backend setup](docs/backend.md) to deploy the pinned revision with `POST
 Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
 
 ```text
-github:wavachao/dsh-citeweave#v0.1.1
+github:wavachao/dsh-citeweave#v0.1.2
 ```
 
 Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
 
-For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1). An npm publication is not required.
+For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2). An npm publication is not required.
 
 ### 3. Connect Harness
 
