@@ -71,15 +71,7 @@ If the backend is unavailable, Harness continues answering without that tool res
 
 ## Evaluation
 
-The [Harness comparison](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks) measures answers with and without CiteWeave using the same DeepSeek model. Timed runs start with the visual model ready; model startup and GPU shutdown are outside the measurement. Prompts, answers, and evaluation criteria accompany the results.
-
-| Question | Harness | Harness + CiteWeave | Inline images, off / on |
-| --- | ---: | ---: | ---: |
-| Eratosthenes' measurement | 32.04 s | 43.03 s | 0 / 1 |
-| Butterfly life cycle | 46.04 s | 45.40 s | 0 / 2 |
-| HDD and SSD structure | 38.38 s | 52.30 s | 0 / 2 |
-
-Mean answer time across two runs per condition. In this environment, local fake-IP DNS blocked native `web_fetch`; the report records that limitation alongside the factual and image review.
+See [benchmarks](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks) for comparison scripts, sample answers, and results.
 
 ## Project structure
 

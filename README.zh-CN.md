@@ -71,15 +71,7 @@ Harness 调用 `citeweave_search`，根据证据组织回答，通过原生附�
 
 ## 评测
 
-[Harness 对比](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks)使用同一个 DeepSeek 模型，比较启用与未启用 CiteWeave 的回答。计时前视觉模型已就绪，模型启动与显存释放不计入耗时；测试同时提供问题、原始回答和评价标准。
-
-| 问题 | Harness | Harness + CiteWeave | 正文图片，未启用 / 启用 |
-| --- | ---: | ---: | ---: |
-| 埃拉托色尼测量地球 | 32.04 秒 | 43.03 秒 | 0 / 1 |
-| 蝴蝶生命周期 | 46.04 秒 | 45.40 秒 | 0 / 2 |
-| HDD 与 SSD 结构 | 38.38 秒 | 52.30 秒 | 0 / 2 |
-
-耗时为每种配置两次回答的平均值。该环境的本地 fake-IP DNS 阻止了原生 `web_fetch` 抓取；报告同时记录了这一限制及事实、配图审阅结果。
+对比脚本、回答样本与结果见 [benchmarks](https://github.com/wavachao/dsh-citeweave/tree/main/benchmarks)。
 
 ## 项目结构
 
