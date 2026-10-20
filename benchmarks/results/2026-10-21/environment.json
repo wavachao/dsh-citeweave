@@ -35,5 +35,5 @@
   "temporarySystemChanges": "None. Model watcher and idle timeout unchanged. Runtime.session prewarm performed before each timed trial.",
   "backendDeployedCommit": "441b803",
   "testedPluginVersion": "0.4.0",
-  "releaseRelationship": "Trials used plugin source b57e489 and backend deployed branch441b803, before the0.5 release. Subsequent release repackaging is not the benchmarked container or commit."
+  "releaseRelationship": "Trials used plugin source b57e489 and backend deployed revision 441b803, before the 0.5 release. Subsequent release repackaging is not the benchmarked container or commit."
 }
