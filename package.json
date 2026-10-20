@@ -1,11 +1,12 @@
 {
   "name": "dsh-citeweave",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web evidence and sourced images for DeepSeek Harness answers",
   "type": "module",
   "main": "index.js",
   "exports": {
     ".": "./index.js",
+    "./client": "./client.js",
     "./package.json": "./package.json",
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./locale/*.json": "./locale/*.json",
@@ -13,6 +14,7 @@
   },
   "files": [
     "index.js",
+    "client.js",
     "cordis.patch.yml",
     "locale/",
     "icon.svg",
@@ -44,12 +46,19 @@
     "dsh": "0.2.1-rc.2"
   },
   "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ]
+    },
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "scripts": {
-    "check": "node --check index.js && node --check test.js",
+    "check": "node --check index.js && node --check client.js && node --check test.js",
     "test": "node --test test.js tests/*.test.js",
     "pack:release": "node scripts/package.js"
   },
@@ -62,11 +71,14 @@
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "~4.0.5",
+    "@deepseek-ai/cordis-plugin-loader": "~1.0.6",
     "@deepseek-ai/dsh": "0.2.1-rc.2",
     "@deepseek-ai/dsh-app-boot": "0.2.1-rc.2",
     "@deepseek-ai/dsh-attachment-local": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-config-editor": "0.2.1-rc.2",
     "@deepseek-ai/dsh-llm": "0.2.1-rc.2",
     "@deepseek-ai/dsh-session-log-export": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-settings": "0.2.1-rc.2",
     "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.2",
     "@deepseek-ai/dsh-tools": "0.2.1-rc.2",
     "fflate": "^0.8.2"

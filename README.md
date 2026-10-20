@@ -14,6 +14,7 @@ CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.
 - Select images using visual descriptions and relevance ranking.
 - Store selected images in Harness's native attachment store and display them through its Markdown renderer.
 - Preserve structured image references for session attachment export.
+- Configure the backend in the shared Harness Desktop/Web plugin interface.
 - Keep the GPU backend separate from the plugin; no Harness source changes are required.
 
 ## Requirements
@@ -35,45 +36,27 @@ Follow [backend setup](docs/backend.md) to deploy the pinned revision with `POST
 
 ### 2. Install the plugin
 
-Use an initialized and configured Harness Web profile. For a first-time setup, run `dsh web` once and configure the answer model before installing the plugin. The examples below use the `web` profile; substitute your actual profile name if different.
+Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
 
-Install the tagged source:
-
-```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.1.0
+```text
+github:wavachao/dsh-citeweave#v0.1.1
 ```
 
-The package ships runnable ES modules. It requires no build step or install scripts.
+Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
 
-Alternatively, download the release archive and install it locally:
-
-```sh
-curl -fL -o dsh-citeweave-0.1.0.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.1.0/dsh-citeweave-0.1.0.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.1.0.tgz
-```
-
-Release archives and their checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.0). The package is distributed through GitHub; the installation command does not depend on an npm publication.
+For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1). An npm publication is not required.
 
 ### 3. Connect Harness
 
-Set the connection settings in the environment that starts Harness:
+Open **Plugins → Installed plugins → CiteWeave**, then open the component's **Configure CiteWeave** control and set:
 
-```sh
-export CITEWEAVE_ENDPOINT=http://127.0.0.1:8765
-# For a protected backend, also set CITEWEAVE_ACCESS_TOKEN to its workspace token.
-dsh --profile web
-```
+- **Backend address** (`endpoint`): for example, `http://127.0.0.1:8765`.
+- **Access token** (`accessToken`): the backend's workspace token, if authentication is enabled.
+- **Timeout** (`timeoutMs`) and **Maximum images** (`maxImages`), if different from the defaults.
 
-In PowerShell:
+Save the settings. New tool calls use them immediately; environment variables and a host restart are not required. The token input is masked and does not reveal the saved value. Leave it blank to retain the saved token, or use **Clear saved token** to remove it. If `CITEWEAVE_ACCESS_TOKEN` is set on the host, it remains the fallback after clearing.
 
-```powershell
-$env:CITEWEAVE_ENDPOINT = 'http://127.0.0.1:8765'
-# $env:CITEWEAVE_ACCESS_TOKEN = 'your-workspace-token'
-dsh --profile web
-```
-
-For a remote backend, use HTTPS or an SSH tunnel. The Harness host downloads the images; the browser does not need the backend address or credential. See [configuration and connection details](docs/reference.md#configuration).
+The configuration page connects to an existing backend; it does not start the GPU service or download its models. For a remote backend, use HTTPS or an SSH tunnel. The Harness host downloads the images; the browser does not need the backend credential.
 
 ## Usage
 
@@ -96,7 +79,7 @@ The tool accepts a search query, optional source URLs, image verification, and c
 | `timeoutMs` | `180000` | Total tool timeout in milliseconds. |
 | `maxImages` | `3` | Maximum images per search; range 1–8. |
 
-Non-empty plugin settings take precedence over environment variables. Settings can also be managed through Harness's plugin configuration or a [patch file](docs/reference.md#configuration).
+Non-empty plugin settings take precedence over environment variables. [Environment variables and configuration patches](docs/reference.md#advanced-configuration) remain available for managed deployments.
 
 ## Operation and limitations
 

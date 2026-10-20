@@ -13,11 +13,13 @@ test('distributable contains the complete plugin and only public runtime resourc
   const files = archive.files.map(file => file.path)
   assert.equal(archive.name, 'dsh-citeweave')
   assert.equal(archive.version, manifest.version)
-  for (const path of ['package.json', 'index.js', 'cordis.patch.yml', 'README.md', 'README.zh-CN.md', 'CHANGELOG.md', 'LICENSE', 'icon.svg', 'locale/en.json', 'locale/zh.json']) {
+  for (const path of ['package.json', 'index.js', 'client.js', 'cordis.patch.yml', 'README.md', 'README.zh-CN.md', 'CHANGELOG.md', 'LICENSE', 'icon.svg', 'locale/en.json', 'locale/zh.json']) {
     assert.ok(files.includes(path), `${path} must ship in the installation archive`)
   }
   assert.equal(manifest.type, 'module')
   assert.equal(manifest.dsh.bundle.patch, './cordis.patch.yml')
+  assert.equal(manifest.dsh.client.platform, 'web')
+  assert.equal(manifest.exports['./client'], './client.js')
   assert.equal(manifest.license, 'MIT')
   assert.ok(manifest.repository.url.includes('wavachao/dsh-citeweave'))
   assert.ok(manifest.engines.dsh.includes('0.2.1-rc.2'))

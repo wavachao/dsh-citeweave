@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1) — 2026-10-20
+
+- Plugin configuration page for the shared Harness Desktop/Web client.
+- Backend address, masked access-token entry, timeout, and image-limit controls.
+- Immediate application of saved configuration to new tool calls.
+- Write-only token handling: blank input preserves the saved token; a separate action clears it.
+- GUI installation and configuration instructions, with command-line and environment options retained.
+
 ## [0.1.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.0) — 2026-10-20
 
 - Native DeepSeek Harness plugin bundle for `0.2.1-rc.2`.

@@ -14,6 +14,7 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 - 根据图片视觉描述与相关性排序选择配图。
 - 将图片存入 Harness 原生附件存储，通过现有 Markdown 渲染器显示。
 - 在工具结果中保留结构化图片引用，供会话附件导出使用。
+- 在 Harness Desktop 与 Web 共用的插件界面中配置后端。
 - GPU 后端独立部署，无需修改 Harness 源码。
 
 ## 运行要求
@@ -35,45 +36,27 @@ Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。
 
 ### 2. 安装插件
 
-先初始化并配置 Harness Web 配置档。首次使用时运行一次 `dsh web`，完成回答模型配置，再安装插件。以下示例使用 `web`；如果使用自定义配置档，请替换为对应名称。
+在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入软件包定位符：
 
-安装带版本标签的源码：
-
-```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.1.0
+```text
+github:wavachao/dsh-citeweave#v0.1.1
 ```
 
-软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
+安装到当前使用的配置档。Harness Desktop 与 Web 共用插件管理客户端和配置界面。软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
 
-也可以下载发布包后本地安装：
-
-```sh
-curl -fL -o dsh-citeweave-0.1.0.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.1.0/dsh-citeweave-0.1.0.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.1.0.tgz
-```
-
-发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.0)。本插件通过 GitHub 分发，安装不依赖 npm 发布。
+命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1)，安装不依赖 npm 发布。
 
 ### 3. 配置连接
 
-在启动 Harness 的环境中设置后端地址：
+打开**插件 → 已安装插件 → CiteWeave**，点击组件的**配置 CiteWeave 图文检索**入口，填写配置：
 
-```sh
-export CITEWEAVE_ENDPOINT=http://127.0.0.1:8765
-# 若后端启用了鉴权，同时设置 CITEWEAVE_ACCESS_TOKEN 为后端工作区令牌。
-dsh --profile web
-```
+- **后端地址**（`endpoint`）：例如 `http://127.0.0.1:8765`。
+- **访问令牌**（`accessToken`）：后端启用鉴权时，填写工作区令牌。
+- **超时**（`timeoutMs`）和**最多图片数**（`maxImages`）：按需调整默认值。
 
-PowerShell：
+保存后，新工具调用立即使用新配置，无需设置环境变量或重启主机。令牌输入框采用遮罩显示，不回显已保存值；留空保留原令牌，使用**清除已保存令牌**可删除已保存值。若主机已设置 `CITEWEAVE_ACCESS_TOKEN`，清除后仍会回退使用该环境变量。
 
-```powershell
-$env:CITEWEAVE_ENDPOINT = 'http://127.0.0.1:8765'
-# $env:CITEWEAVE_ACCESS_TOKEN = 'your-workspace-token'
-dsh --profile web
-```
-
-远程后端使用 HTTPS 或 SSH 隧道。图片由 Harness 主机下载，浏览器无需访问后端地址或持有后端令牌。完整配置见[配置参考](docs/reference.md#configuration)。
+配置页用于连接已部署的后端，不负责启动 GPU 服务或下载模型。远程后端使用 HTTPS 或 SSH 隧道。图片由 Harness 主机下载，浏览器无需持有后端令牌。
 
 ## 使用
 
@@ -96,7 +79,7 @@ dsh --profile web
 | `timeoutMs` | `180000` | 整次工具调用的超时，单位为毫秒。 |
 | `maxImages` | `3` | 单次检索最多返回图片数，范围为 1–8。 |
 
-非空插件配置优先于环境变量。也可在 Harness 插件配置中设置，或使用[配置补丁](docs/reference.md#configuration)。
+非空插件配置优先于环境变量。托管部署仍可使用[环境变量和配置补丁](docs/reference.md#advanced-configuration)。
 
 ## 运行边界
 

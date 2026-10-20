@@ -4,7 +4,11 @@
 
 ## Configuration
 
-The package is a native Host plugin bundle: `package.json` declares `dsh.bundle`, and `cordis.patch.yml` inserts the `citeweave` plugin row. It requires the Harness `tools`, `systemPrompt`, `attachments`, and `fs` services.
+Harness Desktop and Web use the same plugin configuration client. Open **Plugins → Installed plugins → CiteWeave**, then open the component's **Configure CiteWeave** control to edit the backend address, access token, timeout, and image limit. Save to apply the changes to new tool calls immediately. An in-progress call keeps the settings with which it started.
+
+The access-token field is masked and write-only: the saved value is not returned to the page. Leaving it blank preserves the saved token. Use **Clear saved token** to remove it. Form submissions update only changed configuration fields. The page configures a connection; it does not deploy or start the GPU backend.
+
+The package is a native Host plugin bundle with a configuration client: `package.json` declares `dsh.bundle`, and `cordis.patch.yml` inserts the `citeweave` plugin row. The retrieval tool requires the Harness `tools`, `systemPrompt`, `attachments`, and `fs` services.
 
 | Field | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -13,7 +17,43 @@ The package is a native Host plugin bundle: `package.json` declares `dsh.bundle`
 | `timeoutMs` | positive integer | `180000` | Timeout for evidence retrieval and image import together. |
 | `maxImages` | integer, 1–8 | `3` | Limit sent to the backend and applied to imported images. |
 
-A non-empty configured `endpoint` or `accessToken` overrides the corresponding environment variable. Configure them in the environment inherited by the Harness host process; a browser's environment is not used.
+A non-empty configured `endpoint` or `accessToken` overrides the corresponding environment variable. Clearing the stored token removes that configured value; an existing `CITEWEAVE_ACCESS_TOKEN` remains a fallback.
+
+## Advanced installation
+
+For command-line installation, use an initialized Harness Web profile. If this is a new setup, run `dsh web` once and configure the answer model first. The examples use `web`; substitute your actual profile name if different.
+
+```sh
+dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.1.1
+```
+
+Alternatively, download and install the release archive:
+
+```sh
+curl -fL -o dsh-citeweave-0.1.1.tgz \
+  https://github.com/wavachao/dsh-citeweave/releases/download/v0.1.1/dsh-citeweave-0.1.1.tgz
+dsh plugin --profile web add ./dsh-citeweave-0.1.1.tgz
+```
+
+The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.1) includes the archive and `SHA256SUMS`.
+
+## Advanced configuration
+
+Environment variables remain available for managed deployments. Set them in the environment inherited by the Harness host process; a browser's environment is not used:
+
+```sh
+export CITEWEAVE_ENDPOINT=http://127.0.0.1:8765
+# For a protected backend, also set CITEWEAVE_ACCESS_TOKEN to its workspace token.
+dsh --profile web
+```
+
+In PowerShell:
+
+```powershell
+$env:CITEWEAVE_ENDPOINT = 'http://127.0.0.1:8765'
+# $env:CITEWEAVE_ACCESS_TOKEN = 'your-workspace-token'
+dsh --profile web
+```
 
 To configure a profile with an overlay, create `citeweave.config.yml`:
 
@@ -31,7 +71,7 @@ Launch Harness with it:
 dsh --profile web --patch /absolute/path/citeweave.config.yml
 ```
 
-Alternatively, place this row in the profile's own `cordis.patch.yml`. A later patch replaces the row's entire `config` value; keep all intended settings together. Prefer the environment for access tokens to avoid storing them in shared configuration files.
+Alternatively, place this row in the profile's own `cordis.patch.yml`. A later patch replaces the row's entire `config` value; keep all intended settings together. Keep access tokens out of shared configuration files. Use the GUI secret field or the host environment.
 
 To remove the plugin:
 
@@ -79,6 +119,7 @@ Images persist in Harness's attachment store, independently of the backend's ima
 | --- | --- |
 | Plugin installation or startup rejects the Harness version | Use `0.2.1-rc.2`; this release pins that compatibility. |
 | Tool is absent | Install into the profile used to start Harness; inspect `dsh --profile web --dump-config` for the `dsh-citeweave` layer. |
+| Connection changes are not reflected | Save the `citeweave` configuration page and start a new tool call. Check for a later configuration patch overriding the same row. |
 | `401` | Ensure the plugin's token matches the backend's `CITEWEAVE_ACCESS_TOKEN`. Restart the host after changing its environment. |
 | `404` at `/api/evidence` | Deploy the pinned backend revision and verify root API routing. |
 | `409` | The backend is handling another GPU request. Retry after it completes. |
