@@ -41,7 +41,7 @@ export CITEWEAVE_PLUGIN_DIR="$(pwd)"
 cd ..
 git clone https://github.com/wavachao/citeweave.git citeweave-backend
 cd citeweave-backend
-git checkout --detach f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24
+git switch -c deploy/citeweave-vllm f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24
 git apply --check "$CITEWEAVE_PLUGIN_DIR/backend/vllm-openai.patch"
 git apply "$CITEWEAVE_PLUGIN_DIR/backend/vllm-openai.patch"
 uv sync --frozen --python 3.12 --no-dev
@@ -49,6 +49,10 @@ cp .env.example .env
 ```
 
 The adapter changes stay in this dedicated clone. The original CiteWeave checkout does not need to be modified.
+
+The named deployment branch starts at the pinned revision. Review and commit
+the adapter there to keep deployment changes separate from upstream branches;
+credentials, model weights and runtime data remain outside Git.
 
 ## 2. Download the model and ranking assets
 
@@ -91,7 +95,7 @@ docker compose -f "$CITEWEAVE_PLUGIN_DIR/backend/compose.yml" up -d
 docker compose -f "$CITEWEAVE_PLUGIN_DIR/backend/compose.yml" logs --follow vllm
 ```
 
-The container mounts the snapshot read-only, serves offline, and binds to `127.0.0.1:8000`. Its restart policy is `unless-stopped`. The supplied local configuration does not require a model-server API key.
+The container mounts the snapshot read-only, serves offline, and binds to `127.0.0.1:8000`. Its restart policy is `no`, so a reboot does not reserve the shared GPU. The supplied local configuration does not require a model-server API key. For automatic startup on demand and idle memory release, configure the [shared-GPU lifecycle](model-lifecycle.md) with the queued backend.
 
 Check the served alias once initialization completes:
 

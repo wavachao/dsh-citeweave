@@ -1,0 +1,16 @@
+[Unit]
+Description=CiteWeave shared-GPU idle release controller
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/citeweave-backend
+EnvironmentFile=/srv/citeweave-backend/.env
+ExecStart=/srv/citeweave-backend/.venv/bin/python -m citeweave.model_runtime watch
+ExecStopPost=-/usr/bin/docker stop --timeout 10 ${CITEWEAVE_VLLM_CONTAINER}
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

@@ -14,6 +14,8 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 
 持续使用或多个客户端共享后端时，使用[持久任务队列方案](backend/queue.md)：Celery 单工作进程处理检索任务，Redis 持久化待处理任务，PostgreSQL 保存任务状态和结果，现有插件接口保持兼容。
 
+[共享显卡方案](backend/model-lifecycle.md)按需启动 vLLM，并在空闲后释放显存。显卡被其它计算任务占用、显存不足或模型启动失败时，工具明确返回不可用，Harness 不采用失败调用的证据。
+
 - 自动联网搜索，或读取最多五个指定网页。
 - 根据图片视觉描述与相关性排序选择配图。
 - 将图片存入 Harness 原生附件存储，通过现有 Markdown 渲染器显示。
@@ -63,12 +65,12 @@ Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。
 在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入软件包定位符：
 
 ```text
-github:wavachao/dsh-citeweave#v0.3.0
+github:wavachao/dsh-citeweave#v0.4.0
 ```
 
 安装到当前使用的配置档。Harness Desktop 与 Web 共用插件管理客户端和配置界面。软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
 
-命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0)，安装不依赖 npm 发布。
+命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0)，安装不依赖 npm 发布。
 
 ### 3. 配置连接
 

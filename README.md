@@ -14,6 +14,8 @@ The optional [12 GB GPU deployment](backend/README.md) uses a pinned Qwen3.5-9B 
 
 For shared or continuous use, the [durable queue profile](backend/queue.md) adds Celery, a persistent Redis broker and PostgreSQL task results. A single worker processes retrieval jobs; existing plugin requests retain their response contract.
 
+The [shared-GPU lifecycle](backend/model-lifecycle.md) starts vLLM on demand and releases its GPU memory after inactivity. GPU contention or startup failure makes the tool unavailable; Harness continues without evidence from that failed call.
+
 - Search the web or retrieve up to five specified source pages.
 - Select images using visual descriptions and relevance ranking.
 - Store selected images in Harness's native attachment store and display them through its Markdown renderer.
@@ -63,12 +65,12 @@ For local text and vision assistance on an RTX 3060 12 GB, use the [Qwen3.5 vLLM
 Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
 
 ```text
-github:wavachao/dsh-citeweave#v0.3.0
+github:wavachao/dsh-citeweave#v0.4.0
 ```
 
 Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
 
-For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0). An npm publication is not required.
+For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0). An npm publication is not required.
 
 ### 3. Connect Harness
 

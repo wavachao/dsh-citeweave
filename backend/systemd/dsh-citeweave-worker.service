@@ -1,6 +1,6 @@
 [Unit]
 Description=CiteWeave Celery retrieval worker
-After=network-online.target
+After=network-online.target dsh-citeweave-model-watch.service
 
 [Service]
 Type=simple

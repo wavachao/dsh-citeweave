@@ -57,3 +57,7 @@ jobs:
         run: python3 backend/test_queue.py
         env:
           CITEWEAVE_BACKEND_SOURCE: ${{ github.workspace }}/work/backend-source
+      - name: Test shared-GPU lifecycle contracts
+        run: python3 backend/test_model_runtime.py
+        env:
+          CITEWEAVE_BACKEND_SOURCE: ${{ github.workspace }}/work/backend-source

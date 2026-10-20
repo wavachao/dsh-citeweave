@@ -28,6 +28,10 @@ prefetches one task and acknowledges it after execution. Redis uses AOF
 persistence with one-second fsync and a `noeviction` memory policy. PostgreSQL
 and Redis each use a persistent Docker volume and bind only to loopback.
 
+For a shared GPU, enable the [on-demand model lifecycle](model-lifecycle.md).
+It keeps the broker and database available while releasing vLLM's GPU memory
+between periods of use, and rejects new work when the GPU is unavailable.
+
 Delivery is at least once. A worker crash can cause a task to be delivered again;
 retrieval and model inference must tolerate repetition. This is not an
 exactly-once execution guarantee. With Redis's configured visibility timeout,
@@ -104,20 +108,21 @@ sync against the original upstream lock can remove these optional dependencies.
 
 ### systemd user services
 
-The [service templates](systemd/) supervise the API, worker and scheduler. In
+The [service templates](systemd/) supervise the API, worker, scheduler and optional model lifecycle. In
 each template, replace `/srv/citeweave-backend` with the absolute path of the
-backend clone owned by the service user. Then copy the three files to
+backend clone owned by the service user. For the on-demand profile, copy all four files to
 `~/.config/systemd/user/` and start them:
 
 ```sh
 mkdir -p work ~/.config/systemd/user
 systemctl --user daemon-reload
-systemctl --user enable --now dsh-citeweave-worker dsh-citeweave-beat dsh-citeweave-backend
+systemctl --user enable --now dsh-citeweave-model-watch dsh-citeweave-worker dsh-citeweave-beat dsh-citeweave-backend
 ```
 
 For startup without an interactive login, an administrator can enable lingering
 for that account with `loginctl enable-linger USERNAME`. Docker must also start
-at boot; container restart policies restore Redis, PostgreSQL and vLLM. The API
+at boot; container restart policies restore Redis and PostgreSQL. The on-demand
+supervisor starts vLLM only for admitted work. The API
 template binds loopback; use the existing reverse-proxy or tunnel connection
 described in the backend guide.
 

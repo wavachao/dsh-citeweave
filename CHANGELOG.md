@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.4.0) — 2026-10-20
+
+- On-demand vLLM startup and GPU-memory release after an idle period, supervised independently of retrieval workers.
+- Redis leases protect active requests and expire after worker loss; lifecycle operations are serialized across processes.
+- GPU contention, insufficient memory and model startup failures return unavailability without publishing new retrieval tasks or exposing partial evidence.
+- Shared-GPU preemption stops only the configured CiteWeave model container; unrelated processes are never terminated.
+- Deployment branches, lifecycle configuration, service supervision and cold-start behavior documented. Failed plugin calls are not retried or used as answer evidence.
+
 ## [0.3.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.3.0) — 2026-10-20
 
 - Durable Celery retrieval jobs with a Redis broker and PostgreSQL task results, compatible with the existing synchronous evidence API.

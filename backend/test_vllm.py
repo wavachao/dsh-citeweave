@@ -46,6 +46,7 @@ class VllmTests(unittest.TestCase):
                 "CITEWEAVE_VISION_API_KEY": "vision-secret",
                 "CITEWEAVE_RANKER_DEVICE": "cpu",
                 "CITEWEAVE_QUEUE": "",
+                "CITEWEAVE_MODEL_LIFECYCLE": "",
             },
         ).start()
         self.requests = []

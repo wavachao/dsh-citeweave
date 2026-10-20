@@ -13,6 +13,9 @@ test('distributable contains the complete plugin and only public runtime resourc
   const files = archive.files.map(file => file.path)
   assert.equal(archive.name, 'dsh-citeweave')
   assert.equal(archive.version, manifest.version)
+  for (const path of ['backend/model-lifecycle.md', 'backend/test_model_runtime.py', 'backend/systemd/dsh-citeweave-model-watch.service']) {
+    assert.ok(files.includes(path), `${path} must ship in the installation archive`)
+  }
   for (const path of ['backend/README.md', 'backend/compose.yml', 'backend/download_model.py', 'backend/vllm-openai.patch', 'backend/test_vllm.py', 'backend/queue.md', 'backend/queue-compose.yml', 'backend/requirements-queue.txt', 'backend/test_queue.py']) {
     assert.ok(files.includes(path), `${path} must ship in the installation archive`)
   }

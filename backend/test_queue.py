@@ -67,6 +67,7 @@ class QueueTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory(prefix="citeweave-queue-test-")
         self.addCleanup(self.directory.cleanup)
         self.addCleanup(patch.stopall)
+        patch.dict(os.environ, {"CITEWEAVE_MODEL_LIFECYCLE": ""}).start()
         patch.object(config, "DATA", Path(self.directory.name)).start()
         self.broker = Broker()
         patch.object(jobs, "broker", self.broker).start()
