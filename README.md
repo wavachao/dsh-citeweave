@@ -10,6 +10,8 @@
 
 CiteWeave adds the `citeweave_search` tool to [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It retrieves webpage evidence, describes candidate images, and selects relevant illustrations. Harness writes the final answer with inline images and links to their original source pages.
 
+The optional [12 GB GPU deployment](backend/README.md) uses a pinned Qwen3.5-9B community AWQ 4-bit model for local query assistance and image descriptions, with CPU ranking. Harness continues using its configured DeepSeek answer model. No new training is required.
+
 - Search the web or retrieve up to five specified source pages.
 - Select images using visual descriptions and relevance ranking.
 - Store selected images in Harness's native attachment store and display them through its Markdown renderer.
@@ -42,7 +44,7 @@ Screenshots show Harness Web answers. Embedded images retain their original lice
 | DeepSeek Harness | `0.2.1-rc.2` |
 | Plugin host | Node.js 24 or later; Harness attachments and filesystem services |
 | CiteWeave backend | The [pinned evidence API revision](docs/backend.md), reachable from the Harness host |
-| Backend hardware | Linux, Python 3.12, and a CUDA-capable NVIDIA GPU; validated on RTX 3060 12 GB with API text generation and RTX 4090 D 24 GB |
+| Backend hardware | Linux, Python 3.12 and NVIDIA GPU; RTX 3060 12 GB with the Qwen3.5 vLLM profile, or RTX 4090 D 24 GB with the original local profile |
 
 Harness is under active development. This release declares compatibility with the exact version above. Installing the plugin does not install the Python backend or its model weights.
 
@@ -52,17 +54,19 @@ Harness is under active development. This release declares compatibility with th
 
 Follow [backend setup](docs/backend.md) to deploy the pinned revision with `POST /api/evidence`. An existing backend must expose this endpoint; CiteWeave's `main` branch does not currently provide it.
 
+For local text and vision assistance on an RTX 3060 12 GB, use the [Qwen3.5 vLLM guide](backend/README.md). It includes an immutable model revision, pinned container, CPU ranker setup, and real evidence checks. Apply its optional adapter to a dedicated backend clone.
+
 ### 2. Install the plugin
 
 Open **Plugins → Add plugin** in Harness Desktop or Web and enter this package locator:
 
 ```text
-github:wavachao/dsh-citeweave#v0.1.2
+github:wavachao/dsh-citeweave#v0.2.0
 ```
 
 Install it into the active profile. Harness Desktop and Web share the plugin management client and configuration interface. The package ships runnable ES modules and requires no build step or install scripts.
 
-For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2). An npm publication is not required.
+For command-line or archive installation, see [advanced installation](docs/reference.md#advanced-installation). Versioned archives and checksums are available on the [release page](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0). An npm publication is not required.
 
 ### 3. Connect Harness
 

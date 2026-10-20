@@ -10,6 +10,8 @@ The access-token field is masked and write-only: the saved value is not returned
 
 The package is a native Host plugin bundle with a configuration client: `package.json` declares `dsh.bundle`, and `cordis.patch.yml` inserts the `citeweave` plugin row. The retrieval tool requires the Harness `tools`, `systemPrompt`, `attachments`, and `fs` services.
 
+Backend model selection is independent of the Harness answer model. The optional [Qwen3.5 vLLM profile](../backend/README.md) runs local query assistance and visual descriptions with CPU ranking, while Harness retains its DeepSeek provider. Model-server settings belong to the backend's environment, not this plugin configuration form.
+
 | Field | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `endpoint` | string | `CITEWEAVE_ENDPOINT` or `http://127.0.0.1:8765` | HTTP(S) backend origin. API and image routes are resolved from its root. |
@@ -24,18 +26,18 @@ A non-empty configured `endpoint` or `accessToken` overrides the corresponding e
 For command-line installation, use an initialized Harness Web profile. If this is a new setup, run `dsh web` once and configure the answer model first. The examples use `web`; substitute your actual profile name if different.
 
 ```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.1.2
+dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.2.0
 ```
 
 Alternatively, download and install the release archive:
 
 ```sh
-curl -fL -o dsh-citeweave-0.1.2.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.1.2/dsh-citeweave-0.1.2.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.1.2.tgz
+curl -fL -o dsh-citeweave-0.2.0.tgz \
+  https://github.com/wavachao/dsh-citeweave/releases/download/v0.2.0/dsh-citeweave-0.2.0.tgz
+dsh plugin --profile web add ./dsh-citeweave-0.2.0.tgz
 ```
 
-The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2) includes the archive and `SHA256SUMS`.
+The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0) includes the archive and `SHA256SUMS`.
 
 ## Advanced configuration
 

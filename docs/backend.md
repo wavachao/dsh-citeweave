@@ -1,97 +1,77 @@
 # CiteWeave backend setup
 
-[README](../README.md) · [中文说明](#中文说明) · [Plugin reference](reference.md)
+[README](../README.md) · [Qwen3.5 vLLM deployment](../backend/README.md) · [Plugin reference](reference.md) · [中文说明](#中文说明)
 
-The plugin calls a separate CiteWeave service. This release requires `POST /api/evidence`, provided by CiteWeave revision [`f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24`](https://github.com/wavachao/citeweave/tree/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24). Use this revision rather than the backend's `main` branch. The Python service and models are not included in the plugin package.
+The plugin calls a separate CiteWeave service with `POST /api/evidence`. Use CiteWeave revision [`f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24`](https://github.com/wavachao/citeweave/tree/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24), rather than the backend's `main` branch, which currently lacks this endpoint. The Python service and model weights are separate from the Harness plugin.
 
-## Requirements
+## Choose a deployment
 
-- Linux, Python 3.12, and [uv](https://docs.astral.sh/uv/).
-- A CUDA-capable NVIDIA GPU and a driver compatible with the pinned PyTorch CUDA 12.8 wheels. Validated configurations are RTX 3060 12 GB with API text generation and RTX 4090 D 24 GB.
-- Approximately 50 GB free disk for the default model set, plus outbound access to model downloads, public webpages, and the configured search provider. The API text profile below downloads only the vision and embedding models.
+| Profile | Hardware exercised | Text and vision assistance | Ranking |
+| --- | --- | --- | --- |
+| [Qwen3.5 vLLM](../backend/README.md) | RTX 3060 12 GB, 32 GB RAM | One pinned Qwen3.5-9B community 4-bit model served locally through vLLM | Existing embedding model and CrossEncoder on CPU |
+| Original local pipeline | RTX 4090 D 24 GB | Separate local Qwen2.5 text and vision models | Original GPU ranking |
 
-See the backend's pinned [deployment guide](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/DEPLOYMENT.md), [configuration reference](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/CONFIGURATION.md), and [model documentation](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/MODELS.md).
+Both profiles return evidence to Harness; its configured DeepSeek model writes the final answer. The Qwen3.5 option requires no training and is supplied as an optional adapter for a dedicated backend clone. The original backend deployment can continue unchanged if it already provides the evidence API.
 
-## Install
+## RTX 3060 12 GB: Qwen3.5 vLLM
+
+Follow the [complete deployment guide](../backend/README.md). It includes:
+
+1. A separate backend checkout at the immutable evidence-API revision and a checked adapter patch.
+2. The community model snapshot at revision `e4d2d39cede8c5d1716d824cd843e2889c648083`, with `source.json` provenance.
+3. vLLM `0.24.0` through a digest-pinned Compose service, 8,192-token context, one concurrent request and one image per model call.
+4. CPU embeddings and the existing released CrossEncoder.
+5. Workspace authentication, real evidence checks, and GUI connection settings.
+
+The model's stored quantization is `compressed-tensors` symmetric INT4 with group size 32. Leave vLLM's quantization detection automatic even though the repository name contains `AWQ`. Model-serving image input is bounded to 262,144 pixels. Candidate images are described sequentially, so one evidence response may still contain several pictures.
+
+The guide records representative evidence and Harness results, plus the tested driver/container combination. Individual request timings and memory observations are not a general benchmark.
+
+## Original local pipeline
+
+For the original unpatched backend, use Linux, Python 3.12, [uv](https://docs.astral.sh/uv/), a CUDA-capable NVIDIA GPU, a driver compatible with the locked CUDA 12.8 PyTorch wheels, and approximately 50 GB free disk for the default model set:
 
 ```sh
-git clone https://github.com/wavachao/citeweave.git
-cd citeweave
+git clone https://github.com/wavachao/citeweave.git citeweave-backend
+cd citeweave-backend
 git checkout --detach f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24
-uv sync --frozen
+uv sync --frozen --python 3.12 --no-dev
 cp .env.example .env
-```
-
-Choose one text-generation profile before downloading models.
-
-### Local text generation
-
-The default profile loads Qwen2.5-7B locally and has been exercised on RTX 4090 D 24 GB:
-
-```sh
 uv run python scripts/download_models.py
-```
-
-### RTX 3060 12 GB: API text generation
-
-Set these entries in the backend's `.env`:
-
-```dotenv
-CITEWEAVE_BACKEND=api
-CITEWEAVE_API_BASE=https://api.deepseek.com
-CITEWEAVE_API_MODEL=deepseek-flash
-DEEPSEEK_API_KEY=your-provider-key
-CITEWEAVE_MAX_INPUT_TOKENS=8192
-CITEWEAVE_MAX_NEW_TOKENS=512
-```
-
-Text tasks use the configured API; visual descriptions and image ranking remain local. This profile needs no 7B text-model weights or tokenizer. Download the two required models using the backend's pinned revisions:
-
-```sh
-uv run python - <<'PY'
-import json
-from huggingface_hub import snapshot_download
-from scripts.download_models import MODELS, ROOT
-
-for repo in ('Qwen/Qwen2.5-VL-3B-Instruct', 'BAAI/bge-small-en-v1.5'):
-    revision = MODELS[repo]
-    destination = ROOT / 'models' / repo.split('/')[-1]
-    snapshot_download(
-        repo, revision=revision, local_dir=destination, max_workers=3,
-        allow_patterns=['*.json', '*.safetensors', '*.txt', '*.model', '*.jinja', 'LICENSE*', 'README.md'],
-    )
-    (destination / 'source.json').write_text(json.dumps({'repo': repo, 'revision': revision}, indent=2))
-PY
-```
-
-A cold evidence request with visual verification, one source page, and one returned image completed in approximately 25 seconds on an RTX 3060 12 GB with 32 GB system RAM. GPU memory sampled at 500 ms intervals peaked at 7,838 MiB. These figures describe that request; page size, image count, caching, and provider latency affect subsequent requests. Start with the plugin's `timeoutMs: 300000` and `maxImages: 3`.
-
-The task-tuned image ranker is optional; install it with `uv run python scripts/download_ranker.py`. Without it, CiteWeave uses the documented similarity fallback. The RTX 3060 validation included the released ranker.
-
-## Start the service
-
-```sh
+uv run python scripts/download_ranker.py
 uv run python -m citeweave serve --host 127.0.0.1 --port 8765
 ```
 
-For network deployment, set `CITEWEAVE_ACCESS_TOKEN` to a random value of at least 32 characters in the backend's `.env`. Generate one locally:
+The trained ranker is an existing release; the downloader verifies its checksums. It is optional for this original profile, which also supports the documented similarity fallback.
+
+See the pinned backend [deployment guide](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/DEPLOYMENT.md), [configuration reference](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/CONFIGURATION.md), and [model documentation](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/MODELS.md) for additional backend settings and containers.
+
+## Authentication and connection
+
+For a protected backend, generate a workspace token and save it as `CITEWEAVE_ACCESS_TOKEN` in the backend's `.env`:
 
 ```sh
 uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-Set the same token in the environment that starts Harness. Keep the application port private and use an HTTPS reverse proxy or SSH tunnel. The backend's deployment guide also covers Docker, TLS termination, and persistent volumes.
+In Harness, open **Plugins → Installed plugins → CiteWeave → Configure CiteWeave** and enter the backend URL and the same workspace token. The plugin configuration page does not start the GPU backend or install its models. The workspace token is independent of model-server keys and Harness provider credentials.
+
+For network deployment, keep the backend port private and use HTTPS or an SSH tunnel. The endpoint must be reachable from the Harness process, not just from the browser. A tunnel on the Harness host can expose a remote loopback backend locally:
+
+```sh
+ssh -N -L 8765:127.0.0.1:8765 user@backend-host
+```
+
+Then configure `http://127.0.0.1:8765` as the plugin's backend address. The plugin fetches authenticated image bytes and imports them into Harness storage; browser image links do not carry backend tokens.
 
 ## Verify the evidence API
-
-In a second terminal:
 
 ```sh
 curl -f http://127.0.0.1:8765/health
 curl -f http://127.0.0.1:8765/ready
 ```
 
-These check process and model-file availability. Confirm retrieval and GPU inference with a real evidence request:
+Health and readiness do not execute inference. With the vLLM adapter, readiness also probes the vision server's model list for the configured alias. Confirm retrieval and inference with a real request. Set `CITEWEAVE_ACCESS_TOKEN` in the terminal to the workspace token first:
 
 ```sh
 curl -f http://127.0.0.1:8765/api/evidence \
@@ -100,30 +80,18 @@ curl -f http://127.0.0.1:8765/api/evidence \
   -d '{"query":"How did Eratosthenes measure Earth?","urls":["https://en.wikipedia.org/wiki/Eratosthenes"],"verify_images":true,"max_images":3}'
 ```
 
-For an unprotected loopback deployment, omit the Authorization header. A successful response has `mode: "evidence"`, `sources`, `images`, and `retrieval_errors`. An empty image list is valid when no suitable image is found. `404` at this endpoint usually indicates the wrong backend revision or an incorrect reverse-proxy route.
+For an unprotected loopback deployment, omit the Authorization header. A successful response has `mode: "evidence"`, `sources`, `images`, and `retrieval_errors`. An empty image list is valid when no suitable picture is found; a failed source does not necessarily invalidate the remaining evidence. `404` usually indicates an incorrect backend revision or proxy route; `409` means the GPU worker is busy.
 
-The endpoint returns evidence without generating the final answer. It may use the text model to translate a search query and the vision model to describe images. See the pinned [API reference](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/API.md#post-apievidence).
+The endpoint retrieves evidence without writing the final answer. It may use text assistance to translate a search query and vision inference to describe images. See the pinned [API reference](https://github.com/wavachao/citeweave/blob/f6ac71eb6fe6335e52b9ee7a04f5a727c7fdbd24/docs/API.md#post-apievidence).
 
-## Remote connection
-
-`CITEWEAVE_ENDPOINT` must be reachable from the Harness process, not just from the browser. If Harness and CiteWeave run on different hosts, an SSH tunnel can expose the backend locally on the Harness host:
-
-```sh
-ssh -N -L 8765:127.0.0.1:8765 user@backend-host
-```
-
-Then use `CITEWEAVE_ENDPOINT=http://127.0.0.1:8765`. Authenticated image downloads pass through the plugin and are imported into Harness storage, so backend tokens do not appear in the final image URLs.
-
-Run one backend worker per GPU. The service rejects overlapping expensive requests with `409`; it does not provide a multi-tenant inference queue. Preserve the model, ranker, configuration, and data directories according to the backend deployment guide.
+Run one CiteWeave worker per GPU deployment. Preserve model, ranker, configuration and data directories according to the chosen deployment guide. The Compose model server uses `restart: unless-stopped`; manage the separate Python backend with your normal service supervisor.
 
 ## 中文说明
 
-本插件需要独立运行的 CiteWeave GPU 服务，且必须具备 `POST /api/evidence`。请使用本文固定的 `f6ac71e…` 提交；后端 `main` 分支目前没有此接口。
+本插件依赖独立 CiteWeave 证据服务。请使用提供 `POST /api/evidence` 的固定提交，后端 `main` 分支目前没有此接口。
 
-在 Linux 主机上准备 Python 3.12、uv 和兼容 CUDA 12.8 的 NVIDIA 驱动，按上方命令检出指定提交、安装依赖并选择文本模式。默认本地文本模式的完整模型集建议预留约 50 GB 磁盘空间，已在 RTX 4090 D 24 GB 上运行。
+**RTX 3060 12 GB** 推荐使用 [Qwen3.5 vLLM 部署指南](../backend/README.md)：固定的社区 4-bit 权重在本地提供辅助查询和视觉描述，已有嵌入模型与 CrossEncoder 在 CPU 上运行，不重新训练。按指南在独立后端副本应用附带补丁即可，原 CiteWeave 工作目录无需修改。**RTX 4090 D 24 GB** 也可继续使用原本地文本与视觉模型方案。
 
-RTX 3060 12 GB 使用本文的 **API 文本模式**：设置 `CITEWEAVE_BACKEND=api` 和提供方密钥，仅下载视觉与嵌入模型，无需本地 7B 文本模型。图像描述和排序仍在本机 GPU 执行。32 GB 系统内存的 RTX 3060 上，一次包含视觉验证的冷启动请求约 25 秒，返回一张图片，观测显存峰值为 7,838 MiB；这不代表所有问题的固定耗时或最高占用。插件可先设置超时 `300000` 毫秒、最多 `3` 张图片。训练后的图片排序器为可选组件，本次验证已包含该排序器。
+两种方案都把证据交给 Harness，由原来配置的 DeepSeek 模型生成最终回答。模型服务、证据服务和 Harness 模型提供方分别配置，不能混用访问令牌。
 
-网络部署应在后端 `.env` 中设置至少 32 字符的随机 `CITEWEAVE_ACCESS_TOKEN`，并在启动 Harness 的环境中设置同一令牌。通过 HTTPS 或 SSH 隧道连接，后端地址必须能被 Harness 进程访问。图片由插件下载并存入 Harness，浏览器无需后端令牌。
-
-先检查 `/health` 与 `/ready`，再执行上方真实 `/api/evidence` 请求，验证网页检索和 GPU 推理。健康检查本身不执行推理。若证据接口返回 `404`，检查后端提交和代理路由；返回 `409` 表示 GPU 工作进程繁忙，应等待当前任务结束后重试。
+后端部署完成后，在 Harness 插件配置页填写地址和工作区令牌即可。网络连接使用 HTTPS 或 SSH 隧道，地址必须可由 Harness 进程访问。先检查健康与就绪接口，再执行真实证据请求；图片会导入 Harness 附件存储，浏览器无需后端令牌。

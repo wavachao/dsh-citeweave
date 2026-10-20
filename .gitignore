@@ -8,3 +8,6 @@ work/
 *.pem
 *.key
 *.log
+
+backend/models/
+backend/__pycache__/

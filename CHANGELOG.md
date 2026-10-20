@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0) — 2026-10-20
+
+- Optional Qwen3.5-9B community AWQ 4-bit backend for text assistance and visual descriptions on RTX 3060 12 GB.
+- Reproducible model download with an immutable revision and `source.json`, plus a digest-pinned vLLM Compose service.
+- OpenAI-compatible text and vision adapter, CPU embeddings and existing CrossEncoder, model-aware caching, and API readiness checks.
+- Model-server credentials remain separate from CiteWeave workspace authentication and Harness provider configuration.
+- vLLM input-token budgeting for the 8,192-token context; the original DeepSeek API behavior is retained.
+- Deployment instructions, adapter regression checks and representative live evidence results. The adapter applies to a separate backend clone; the Harness tool contract is unchanged.
+
 ## [0.1.2](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2) — 2026-10-20
 
 - Illustrated examples covering geology, wildlife identification, and bridge engineering.

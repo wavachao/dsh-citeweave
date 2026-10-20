@@ -10,6 +10,8 @@
 
 CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 注册 `citeweave_search` 工具，检索网页证据、描述候选图片并筛选相关配图。Harness 使用这些材料组织最终回答，在正文中展示图片并链接至原始来源页面。
 
+可选的 [12 GB 显卡部署方案](backend/README.md)使用固定版本的 Qwen3.5-9B 社区 AWQ 4-bit 模型，在本地完成辅助查询和视觉描述，排序在 CPU 上执行。Harness 的最终回答仍由原来配置的 DeepSeek 模型生成，无需重新训练。
+
 - 自动联网搜索，或读取最多五个指定网页。
 - 根据图片视觉描述与相关性排序选择配图。
 - 将图片存入 Harness 原生附件存储，通过现有 Markdown 渲染器显示。
@@ -42,7 +44,7 @@ CiteWeave 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 | DeepSeek Harness | `0.2.1-rc.2` |
 | 插件运行环境 | Node.js 24 或更新版本；Harness 附件与文件系统服务 |
 | CiteWeave 后端 | 提供证据接口的[固定版本](docs/backend.md)，可由 Harness 主机访问 |
-| 后端硬件 | Linux、Python 3.12、支持 CUDA 的 NVIDIA GPU；已验证 RTX 3060 12 GB（API 文本模式）和 RTX 4090 D 24 GB |
+| 后端硬件 | Linux、Python 3.12、NVIDIA GPU；Qwen3.5 vLLM 方案已验证 RTX 3060 12 GB，原本地方案已验证 RTX 4090 D 24 GB |
 
 Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。安装插件不会同时安装 Python 后端或模型权重。
 
@@ -52,17 +54,19 @@ Harness 仍在持续开发，本插件仅声明兼容上表中的明确版本。
 
 按照[后端部署指南](docs/backend.md)安装提供 `POST /api/evidence` 的固定版本。已有部署也必须具备此接口；CiteWeave 的 `main` 分支目前未提供该接口。
 
+如需在 RTX 3060 12 GB 上本地运行辅助文本与视觉模型，使用 [Qwen3.5 vLLM 指南](backend/README.md)。指南包含固定模型提交、容器镜像、CPU 排序器配置及真实证据接口检查；附带适配补丁只需应用到独立后端副本。
+
 ### 2. 安装插件
 
 在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入软件包定位符：
 
 ```text
-github:wavachao/dsh-citeweave#v0.1.2
+github:wavachao/dsh-citeweave#v0.2.0
 ```
 
 安装到当前使用的配置档。Harness Desktop 与 Web 共用插件管理客户端和配置界面。软件包直接提供可运行的 ES 模块，无需构建，也不执行安装脚本。
 
-命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.1.2)，安装不依赖 npm 发布。
+命令行和发布包安装见[高级安装](docs/reference.md#advanced-installation)。带版本的发布包及校验和见[版本页面](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.2.0)，安装不依赖 npm 发布。
 
 ### 3. 配置连接
 

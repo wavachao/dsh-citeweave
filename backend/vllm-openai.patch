@@ -1,0 +1,350 @@
+diff --git a/.env.example b/.env.example
+--- a/.env.example
++++ b/.env.example
+@@ -17,6 +17,17 @@
+ CITEWEAVE_API_BASE=https://api.deepseek.com
+ CITEWEAVE_API_MODEL=deepseek-flash
+ DEEPSEEK_API_KEY=
++# Optional vLLM OpenAI-compatible backend; preserves local defaults above.
++# Set CITEWEAVE_BACKEND=api and use the served model name, not a filesystem path.
++# CITEWEAVE_API_TYPE=vllm
++# CITEWEAVE_API_BASE=http://127.0.0.1:8000/v1
++# CITEWEAVE_API_MODEL=citeweave-vlm
++# CITEWEAVE_API_KEY=
++# CITEWEAVE_VISION_BACKEND=api
++# CITEWEAVE_VISION_API_BASE=http://127.0.0.1:8000/v1
++# CITEWEAVE_VISION_API_MODEL=citeweave-vlm
++# CITEWEAVE_VISION_API_KEY=
++# CITEWEAVE_RANKER_DEVICE=cpu
+ # Optional SearXNG JSON endpoint; default search uses DDGS.
+ SEARXNG_URL=
+ # Official evaluation is opt-in and requires separately configured judge keys.
+diff --git a/src/citeweave/generation.py b/src/citeweave/generation.py
+--- a/src/citeweave/generation.py
++++ b/src/citeweave/generation.py
+@@ -39,7 +39,10 @@
+             from peft import PeftModel
+ 
+             self.model = PeftModel.from_pretrained(
+-                self.model, self.adapter, local_files_only=True, autocast_adapter_dtype=False
++                self.model,
++                self.adapter,
++                local_files_only=True,
++                autocast_adapter_dtype=False,
+             ).to(dtype=torch.bfloat16)
+ 
+     def unload(self):
+@@ -73,20 +76,28 @@
+         if os.getenv("CITEWEAVE_BACKEND", "local") == "api":
+             import httpx
+ 
+-            key = os.getenv("DEEPSEEK_API_KEY")
+-            if not key:
+-                raise ValueError("Set DEEPSEEK_API_KEY in .env before selecting the API backend")
++            key = os.getenv("CITEWEAVE_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
++            vllm = os.getenv("CITEWEAVE_API_TYPE", "deepseek") == "vllm"
++            if not key and not vllm:
++                raise ValueError("Set CITEWEAVE_API_KEY or DEEPSEEK_API_KEY for the API backend")
+             with httpx.Client(timeout=180) as client:
+                 r = client.post(
+                     os.getenv("CITEWEAVE_API_BASE", "https://api.deepseek.com").rstrip("/")
+                     + "/chat/completions",
+-                    headers={"Authorization": f"Bearer {key}"},
++                    headers={"Authorization": f"Bearer {key}"} if key else {},
+                     json={
+                         "model": os.getenv("CITEWEAVE_API_MODEL", "deepseek-flash"),
+                         "messages": messages,
+                         "max_tokens": self.max_new,
+                         "temperature": 0,
+-                        "thinking": {"type": "disabled"},
++                        **(
++                            {
++                                "chat_template_kwargs": {"enable_thinking": False},
++                                "truncate_prompt_tokens": config.MAX_INPUT,
++                            }
++                            if vllm
++                            else {"thinking": {"type": "disabled"}}
++                        ),
+                     },
+                 )
+                 r.raise_for_status()
+diff --git a/src/citeweave/vision.py b/src/citeweave/vision.py
+--- a/src/citeweave/vision.py
++++ b/src/citeweave/vision.py
+@@ -1,7 +1,9 @@
+-"""Local visual caption verification with content- and model-keyed caching."""
++"""Visual caption verification with content- and model-keyed caching."""
+ 
++import base64
+ import hashlib
+ import json
++import os
+ from pathlib import Path
+ 
+ from . import config
+@@ -15,17 +17,28 @@
+ 
+ 
+ def caption_images(images, generator, limit=10):
+-    import gc
+-
+     import httpx
+-    import torch
+-    from PIL import Image
+-    from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+ 
+     directory = config.DATA / "cache/captions"
+     directory.mkdir(parents=True, exist_ok=True)
+-    source = Path(config.VISION_MODEL) / "source.json"
+-    revision = source.read_text() if source.exists() else str(config.VISION_MODEL)
++    api = os.getenv("CITEWEAVE_VISION_BACKEND", "local") == "api"
++    base = os.getenv(
++        "CITEWEAVE_VISION_API_BASE",
++        os.getenv("CITEWEAVE_API_BASE", "https://api.deepseek.com"),
++    )
++    model_name = os.getenv(
++        "CITEWEAVE_VISION_API_MODEL", os.getenv("CITEWEAVE_API_MODEL", "deepseek-flash")
++    )
++    api_type = os.getenv("CITEWEAVE_API_TYPE", "deepseek")
++    if api:
++        revision = json.dumps(
++            {"backend": "api", "base": base, "model": model_name, "type": api_type},
++            sort_keys=True,
++        )
++    else:
++        source = Path(config.VISION_MODEL) / "source.json"
++        revision = source.read_text() if source.exists() else str(config.VISION_MODEL)
++    caption_kind = "api_visual_description" if api else "local_visual_description"
+     results, pending = [], []
+     for image in images[:limit]:
+         try:
+@@ -34,11 +47,15 @@
+                 path.read_bytes() + revision.encode() + PROMPT.encode()
+             ).hexdigest()
+             cached = directory / (key + ".json")
+-            item = {**image, "publisher_caption": image["caption"], "local_path": str(path)}
++            item = {
++                **image,
++                "publisher_caption": image["caption"],
++                "local_path": str(path),
++            }
+             if cached.exists():
+                 item.update(
+                     caption=json.loads(cached.read_text())["caption"],
+-                    caption_kind="local_visual_description",
++                    caption_kind=caption_kind,
+                 )
+             else:
+                 pending.append((item, path, cached))
+@@ -47,6 +64,55 @@
+             results.append({**image, "image_error": str(e)[:150]})
+     if not pending:
+         return results + images[limit:]
++    if api:
++        key = (
++            os.getenv("CITEWEAVE_VISION_API_KEY")
++            or os.getenv("CITEWEAVE_API_KEY")
++            or os.getenv("DEEPSEEK_API_KEY")
++        )
++        if not key and api_type != "vllm":
++            raise ValueError("Set CITEWEAVE_VISION_API_KEY or CITEWEAVE_API_KEY for vision API")
++        with httpx.Client(timeout=180) as client:
++            for item, path, cached in pending:
++                # Reuse validated, resized JPEG bytes. Never delegate a remote
++                # URL fetch (or its credentials) to the model server.
++                uri = "data:image/jpeg;base64," + base64.b64encode(path.read_bytes()).decode()
++                response = client.post(
++                    base.rstrip("/") + "/chat/completions",
++                    headers={"Authorization": f"Bearer {key}"} if key else {},
++                    json={
++                        "model": model_name,
++                        "messages": [
++                            {
++                                "role": "user",
++                                "content": [
++                                    {"type": "image_url", "image_url": {"url": uri}},
++                                    {"type": "text", "text": PROMPT},
++                                ],
++                            }
++                        ],
++                        "max_tokens": 180,
++                        "temperature": 0,
++                        **(
++                            {"chat_template_kwargs": {"enable_thinking": False}}
++                            if api_type == "vllm"
++                            else {"thinking": {"type": "disabled"}}
++                        ),
++                    },
++                )
++                response.raise_for_status()
++                caption = response.json()["choices"][0]["message"]["content"]
++                if not isinstance(caption, str) or not caption.strip():
++                    raise ValueError("Vision API returned an empty description")
++                item.update(caption=caption, caption_kind=caption_kind)
++                cached.write_text(json.dumps({"caption": caption}, ensure_ascii=False))
++        return results + images[limit:]
++    import gc
++
++    import torch
++    from PIL import Image
++    from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
++
+     with GPU_LOCK:
+         generator.unload()
+         processor = AutoProcessor.from_pretrained(config.VISION_MODEL, local_files_only=True)
+@@ -65,7 +131,10 @@
+                     [
+                         {
+                             "role": "user",
+-                            "content": [{"type": "image"}, {"type": "text", "text": PROMPT}],
++                            "content": [
++                                {"type": "image"},
++                                {"type": "text", "text": PROMPT},
++                            ],
+                         }
+                     ],
+                     tokenize=False,
+diff --git a/src/citeweave/ranking.py b/src/citeweave/ranking.py
+--- a/src/citeweave/ranking.py
++++ b/src/citeweave/ranking.py
+@@ -1,4 +1,5 @@
+ import hashlib
++import os
+ import re
+ from pathlib import Path
+ 
+@@ -15,20 +16,23 @@
+         self.threshold = 0.5
+         self.cross_encoder = None
+         self.cross_tokenizer = None
++        self.device = os.getenv("CITEWEAVE_RANKER_DEVICE", "cuda")
+ 
+     def load(self):
+         if self.encoder is None:
+             from sentence_transformers import SentenceTransformer
+ 
+             self.encoder = SentenceTransformer(
+-                config.EMBEDDING_MODEL, device="cuda", local_files_only=True
++                config.EMBEDDING_MODEL, device=self.device, local_files_only=True
+             )
+         if self.head is None and Path(self.checkpoint).exists():
+             import torch
+ 
+-            saved = torch.load(self.checkpoint, map_location="cuda", weights_only=True)
++            saved = torch.load(self.checkpoint, map_location=self.device, weights_only=True)
+             self.head = (
+-                make_head(saved["feature_dim"], saved.get("architecture", "mlp")).cuda().eval()
++                make_head(saved["feature_dim"], saved.get("architecture", "mlp"))
++                .to(self.device)
++                .eval()
+             )
+             self.head.load_state_dict(saved["state_dict"])
+             self.threshold = saved["threshold"]
+@@ -68,7 +72,10 @@
+             selected = json.loads(selected_file.read_text())
+             if selected.get("deploy"):
+                 import torch
+-                from transformers import AutoModelForSequenceClassification, AutoTokenizer
++                from transformers import (
++                    AutoModelForSequenceClassification,
++                    AutoTokenizer,
++                )
+ 
+                 if self.cross_encoder is None:
+                     checkpoint = config.RUNS / "crossencoder/best"
+@@ -81,7 +88,7 @@
+                         AutoModelForSequenceClassification.from_pretrained(
+                             checkpoint, local_files_only=True
+                         )
+-                        .cuda()
++                        .to(self.device)
+                         .eval()
+                     )
+                 self.threshold = selected["threshold"]
+@@ -96,7 +103,7 @@
+                             truncation=True,
+                             max_length=selected["max_length"],
+                             return_tensors="pt",
+-                        ).to("cuda")
++                        ).to(self.device)
+                         scores.extend(
+                             self.cross_encoder(**tokens).logits.sigmoid().flatten().cpu().tolist()
+                         )
+@@ -106,7 +113,7 @@
+         import torch
+ 
+         with torch.inference_mode():
+-            x = torch.from_numpy(self.features(vectors[0], vectors[1:])).cuda()
++            x = torch.from_numpy(self.features(vectors[0], vectors[1:])).to(self.device)
+             return self.head(x).sigmoid().flatten().cpu().numpy(), vectors[1:]
+ 
+     def select(self, query, images, limit=None):
+diff --git a/src/citeweave/app.py b/src/citeweave/app.py
+--- a/src/citeweave/app.py
++++ b/src/citeweave/app.py
+@@ -158,10 +158,36 @@
+ 
+ @app.get("/ready")
+ def ready():
+-    paths = [Path(config.EMBEDDING_MODEL), Path(config.VISION_MODEL)]
++    paths = [Path(config.EMBEDDING_MODEL)]
++    if os.getenv("CITEWEAVE_VISION_BACKEND", "local") != "api":
++        paths.append(Path(config.VISION_MODEL))
+     if os.getenv("CITEWEAVE_BACKEND", "local") == "local":
+         paths.append(Path(config.MODEL))
+     available = all((p / "config.json").is_file() for p in paths)
++    if available and os.getenv("CITEWEAVE_VISION_BACKEND", "local") == "api":
++        base = os.getenv(
++            "CITEWEAVE_VISION_API_BASE",
++            os.getenv("CITEWEAVE_API_BASE", "https://api.deepseek.com"),
++        )
++        model = os.getenv(
++            "CITEWEAVE_VISION_API_MODEL",
++            os.getenv("CITEWEAVE_API_MODEL", "deepseek-flash"),
++        )
++        key = (
++            os.getenv("CITEWEAVE_VISION_API_KEY")
++            or os.getenv("CITEWEAVE_API_KEY")
++            or os.getenv("DEEPSEEK_API_KEY")
++        )
++        try:
++            with httpx.Client(timeout=3) as client:
++                response = client.get(
++                    base.rstrip("/") + "/models",
++                    headers={"Authorization": f"Bearer {key}"} if key else {},
++                )
++                response.raise_for_status()
++                available = any(row["id"] == model for row in response.json()["data"])
++        except (httpx.HTTPError, ValueError, KeyError, TypeError):
++            available = False
+     return JSONResponse({"ready": available}, status_code=200 if available else 503)
+ 
+ 
+@@ -187,6 +213,16 @@
+         "backend": os.getenv("CITEWEAVE_BACKEND", "local"),
+         "api_model": os.getenv("CITEWEAVE_API_MODEL", "deepseek-flash"),
+         "api_base": os.getenv("CITEWEAVE_API_BASE", "https://api.deepseek.com"),
++        "api_type": os.getenv("CITEWEAVE_API_TYPE", "deepseek"),
++        "vision_backend": os.getenv("CITEWEAVE_VISION_BACKEND", "local"),
++        "vision_api_model": os.getenv(
++            "CITEWEAVE_VISION_API_MODEL",
++            os.getenv("CITEWEAVE_API_MODEL", "deepseek-flash"),
++        ),
++        "vision_api_base": os.getenv(
++            "CITEWEAVE_VISION_API_BASE",
++            os.getenv("CITEWEAVE_API_BASE", "https://api.deepseek.com"),
++        ),
+         "search": os.getenv("SEARXNG_URL", ""),
+         "budgets": [config.MAX_INPUT, config.MAX_NEW, config.MAX_IMAGES],
+     }
+@@ -282,7 +318,9 @@
+                 engine.ranker.unload()
+     except BlockingIOError as e:
+         raise HTTPException(
+-            409, "The compute worker is busy. Please retry shortly.", headers={"Retry-After": "10"}
++            409,
++            "The compute worker is busy. Please retry shortly.",
++            headers={"Retry-After": "10"},
+         ) from e
+     except Exception as e:
+         logger.exception("Search failed; request_id=%s", http_request.state.request_id)

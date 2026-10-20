@@ -1,0 +1,42 @@
+name: dsh-citeweave
+
+services:
+  vllm:
+    image: vllm/vllm-openai@sha256:251eba5cc7c12fed0b75da22a9240e582b1c9e39f6fbc064f86781b963bd814f
+    container_name: dsh-citeweave-vllm
+    restart: unless-stopped
+    gpus: all
+    ipc: host
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      HF_HUB_OFFLINE: "1"
+      VLLM_NO_USAGE_STATS: "1"
+    volumes:
+      - "${CITEWEAVE_MODEL_DIR:?Set CITEWEAVE_MODEL_DIR to the downloaded model directory}:/model:ro"
+      - vllm-cache:/root/.cache
+    command:
+      - /model
+      - --served-model-name
+      - citeweave-qwen3.5-9b-awq-e4d2d39
+      - --dtype
+      - bfloat16
+      - --max-model-len
+      - "8192"
+      - --max-num-seqs
+      - "1"
+      - --max-num-batched-tokens
+      - "1024"
+      - --enable-chunked-prefill
+      - --gpu-memory-utilization
+      - "0.90"
+      - --enforce-eager
+      - --limit-mm-per-prompt
+      - '{"image":1,"video":0}'
+      - --mm-processor-kwargs
+      - '{"max_pixels":262144}'
+      - --reasoning-parser
+      - qwen3
+
+volumes:
+  vllm-cache:
