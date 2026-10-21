@@ -26,18 +26,18 @@ A non-empty configured `endpoint` or `accessToken` overrides the corresponding e
 For command-line installation, use an initialized Harness Web profile. If this is a new setup, run `dsh web` once and configure the answer model first. The examples use `web`; substitute your actual profile name if different.
 
 ```sh
-dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.5.0
+dsh plugin --profile web add github:wavachao/dsh-citeweave#v0.5.1
 ```
 
 Alternatively, download and install the release archive:
 
 ```sh
-curl -fL -o dsh-citeweave-0.5.0.tgz \
-  https://github.com/wavachao/dsh-citeweave/releases/download/v0.5.0/dsh-citeweave-0.5.0.tgz
-dsh plugin --profile web add ./dsh-citeweave-0.5.0.tgz
+curl -fL -o dsh-citeweave-0.5.1.tgz \
+  https://github.com/wavachao/dsh-citeweave/releases/download/v0.5.1/dsh-citeweave-0.5.1.tgz
+dsh plugin --profile web add ./dsh-citeweave-0.5.1.tgz
 ```
 
-The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.0) includes the archive and `SHA256SUMS`.
+The [release](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.1) includes the archive and `SHA256SUMS`.
 
 ## Advanced configuration
 

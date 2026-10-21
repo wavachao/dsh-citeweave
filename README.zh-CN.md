@@ -45,7 +45,7 @@ cd dsh-citeweave/backend
 在 Harness Desktop 或 Web 中打开**插件 → 添加插件**，输入：
 
 ```text
-github:wavachao/dsh-citeweave#v0.5.0
+github:wavachao/dsh-citeweave#v0.5.1
 ```
 
 打开**已安装插件 → CiteWeave → 配置 CiteWeave 图文检索**，填写后端地址和工作区访问令牌，保存即可。

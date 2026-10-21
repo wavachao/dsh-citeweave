@@ -45,7 +45,7 @@ Follow the [deployment guide](https://github.com/wavachao/dsh-citeweave/blob/mai
 In Harness Desktop or Web, open **Plugins → Add plugin** and enter:
 
 ```text
-github:wavachao/dsh-citeweave#v0.5.0
+github:wavachao/dsh-citeweave#v0.5.1
 ```
 
 Open **Installed plugins → CiteWeave → Configure CiteWeave**, enter the backend address and workspace access token, then save.

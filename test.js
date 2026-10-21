@@ -92,6 +92,8 @@ test('native tool registry: authenticated evidence, durable images, partial fail
   assert.deepEqual(requests[0].body, { query: 'diagram', urls: ['https://example.org/page'], verify_images: true, refresh: false, max_images: 3 })
   assert.ok(requests.every(req => req.authorization === 'Bearer test-secret'))
   const text = result.content[0].text
+  assert.ok(text.includes(`\n\n${result.value.images[0].markdown}\n\nImage source:`), 'the example must separate the image and its source into Markdown paragraphs')
+  assert.match((await ctx.systemPrompt.assemble()).sections.find(section => section.name === 'tool:citeweave_search').text, /blank line before and after/)
   assert.match(text, /!\[A \\\[diagram\\\]\]\(/)
   assert.match(text, /citeweave%20test%20/)
   assert.match(text, /https:\/\/example.org\/%E7%8B%AE%E5%AD%90\?q=1&lang=en&name=a%20b/)

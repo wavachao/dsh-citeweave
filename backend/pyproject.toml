@@ -1,6 +1,6 @@
 [project]
 name = "citeweave"
-version = "0.5.0"
+version = "0.5.1"
 description = "Self-hosted multimodal web search with interleaved images and traceable sources"
 readme = "README.md"
 license = "MIT"

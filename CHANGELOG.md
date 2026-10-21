@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.1](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.1) — 2026-10-21
+
+- Image examples and answer guidance place illustrations, captions, and source links in separate Markdown paragraphs.
+- Shorter project READMEs, with detailed measurements in dated evaluation reports.
+
 ## [0.5.0](https://github.com/wavachao/dsh-citeweave/releases/tag/v0.5.0) — 2026-10-21
 
 - Complete Python backend source, dependency lock, deployment configuration, and tests maintained alongside the Harness plugin.

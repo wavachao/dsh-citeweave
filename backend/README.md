@@ -40,7 +40,7 @@ Use automatic quantization detection: this snapshot stores
 Clone this repository and enter its backend directory:
 
 ```sh
-git clone --branch v0.5.0 --depth 1 https://github.com/wavachao/dsh-citeweave.git
+git clone --branch v0.5.1 --depth 1 https://github.com/wavachao/dsh-citeweave.git
 cd dsh-citeweave
 git switch -c deploy/citeweave
 cd backend
